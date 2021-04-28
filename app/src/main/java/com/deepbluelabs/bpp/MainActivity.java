@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (Objects.nonNull(bluetoothAdapter)) {
             BluetoothClass bluetoothClass = bluetoothAdapter.getBluetoothClass();
-            deviceClassTextView.setText(HexDump.toHexString(bluetoothClass.getClassOfDevice()));
+            if (Objects.nonNull(bluetoothClass)) {
+                deviceClassTextView.setText(HexDump.toHexString(bluetoothClass.getClassOfDevice()));
+            }
         }
 
         deviceClassButton.setOnClickListener(this::showDeviceClassSelector);
@@ -131,10 +133,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean setBluetoothDeviceClass(int deviceClass) {
-        boolean result = bluetoothAdapter.setBluetoothClass(new BluetoothClass(deviceClass));
-        if (result) {
-            deviceClassTextView.setText(HexDump.toHexString(deviceClass));
+        try {
+            boolean result = bluetoothAdapter.setBluetoothClass(new BluetoothClass(deviceClass));
+            if (result) {
+                deviceClassTextView.setText(HexDump.toHexString(deviceClass));
+            }
+            return result;
+        } catch (Exception exception) {
+            //Could not set lets just return false
+            return false;
         }
-        return result;
     }
 }
