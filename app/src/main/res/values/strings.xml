@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Bluetooth++</string>
+    <string name="device_class">Device Class:</string>
+    <string name="unknown">Unknown</string>
+    <string name="device_class_set">Device class set</string>
+    <string name="could_not_set_device_class">Could not set device class!</string>
+    <string name="select_device_class">Select Device Class</string>
+    <string name="gamepad">Gamepad</string>
+    <string name="phone">Phone</string>
+    <string name="custom">Custom</string>
+    <string name="enter_device_class">Enter Device Class:</string>
 </resources>
