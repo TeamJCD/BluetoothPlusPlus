@@ -10,4 +10,5 @@
     <string name="custom">Custom</string>
     <string name="enter_device_class">Enter Device Class:</string>
     <string name="bluetooth_adapter_not_found">Bluetooth Adapter is not found!</string>
+    <string name="reset">Reset</string>
 </resources>

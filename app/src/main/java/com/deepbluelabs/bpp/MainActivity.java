@@ -87,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillDeviceClass() {
-        BluetoothClass bluetoothClass = Optional.ofNullable(bluetoothAdapter.getBluetoothClass())
-                .orElseGet(() -> new BluetoothClass(retrieveBluetoothClassConfig()));
+        BluetoothClass bluetoothClass = getBluetoothDeviceClass();
         if (Objects.nonNull(bluetoothClass)) {
             deviceClassTextView.setText(HexDump.toHexString(bluetoothClass.getClassOfDevice()));
         }
@@ -103,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter.add(getString(R.string.gamepad));
         arrayAdapter.add(getString(R.string.phone));
         arrayAdapter.add(getString(R.string.custom));
+        arrayAdapter.add(getString(R.string.reset));
 
         builderSingle.setNegativeButton(this.getText(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
 
@@ -116,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 //Custom Device Class
                 showCustomDeviceClassSelector();
                 return;
+            } else if (getString(R.string.reset).equals(selection)) {
+                int defaultBluetoothDeviceClass = PreferenceUtils.getDefaultBluetoothDeviceClass(this);
+                if (defaultBluetoothDeviceClass != 0) {
+                    setBluetoothDeviceClass(defaultBluetoothDeviceClass);
+                }
             }
 
             BluetoothDeviceClassEnum.fromDeviceName(selection)
@@ -170,7 +175,22 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    private BluetoothClass getBluetoothDeviceClass() {
+        return Optional.ofNullable(bluetoothAdapter.getBluetoothClass())
+                .orElseGet(() -> new BluetoothClass(retrieveBluetoothClassConfig()));
+    }
+
     private boolean setBluetoothDeviceClass(int deviceClass) {
+        int defaultBluetoothDeviceClass = PreferenceUtils.getDefaultBluetoothDeviceClass(this);
+        if (defaultBluetoothDeviceClass == 0) {
+            BluetoothClass bluetoothDeviceClass = getBluetoothDeviceClass();
+            if (Objects.nonNull(bluetoothDeviceClass)) {
+                PreferenceUtils.setDefaultBluetoothDeviceClass(this, bluetoothDeviceClass.getDeviceClass());
+            } else {
+                return false;
+            }
+        }
+
         try {
             boolean result = bluetoothAdapter.setBluetoothClass(new BluetoothClass(deviceClass));
             if (!result) {
