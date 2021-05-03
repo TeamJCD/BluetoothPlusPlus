@@ -2,19 +2,19 @@
 
     <string name="app_name">Bluetooth++</string>
 
-    <string name="error_device_class_empty">The Device Class field can\u2019t be empty.</string>
-    <string name="error_device_class_invalid">Invalid Device Class.</string>
-    <string name="error_name_empty">The Name field can\'t be empty.</string>
+    <string name="error_device_class_empty">O campo da classe do dispositivo não pode estar vazia.</string>
+    <string name="error_device_class_invalid">Classe de dispositivo inválida.</string>
+    <string name="error_name_empty">A caixa de nome não pode estar vazia.</string>
     <string name="error_title"/>
 
-    <string name="menu_new">New</string>
-    <string name="menu_save">Save</string>
-    <string name="menu_cancel">Cancel</string>
-    <string name="menu_delete">Delete</string>
+    <string name="menu_new">Novo</string>
+    <string name="menu_save">Salvar</string>
+    <string name="menu_cancel">Cancelar</string>
+    <string name="menu_delete">Excluir</string>
 
-    <string name="preference_title_device_class">Device Class</string>
-    <string name="preference_title_name">Name</string>
+    <string name="preference_title_device_class">Classe do dispositivo</string>
+    <string name="preference_title_name">Nome</string>
 
-    <string name="screen_title_edit">Edit Device Class</string>
+    <string name="screen_title_edit">Editar classe do dispositivo</string>
 
 </resources>
