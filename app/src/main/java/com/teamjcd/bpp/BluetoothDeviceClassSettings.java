@@ -16,7 +16,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
-import com.android.internal.util.HexDump;
 import com.teamjcd.bpp.db.BluetoothDeviceClassData;
 import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
@@ -35,7 +34,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     private static final String TAG = "BluetoothDeviceClassSettings";
 
     private static final int MENU_NEW = Menu.FIRST;
-    private static final int MENU_RESTORE = Menu.FIRST + 1;
 
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
@@ -45,6 +43,10 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                if (state == BluetoothAdapter.STATE_ON) {
+                    saveInitialValue();
+                }
                 fillList();
             }
         }
@@ -62,6 +64,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         // something like "please enable bluetooth in order to manage device classes
         if (!mAdapter.isEnabled()) {
             mAdapter.enable();
+        } else {
+            saveInitialValue();
         }
     }
 
@@ -92,12 +96,11 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
         menu.add(0, MENU_NEW, 0,
                 getResources().getString(R.string.menu_new))
                 .setIcon(R.drawable.ic_add_24)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -126,6 +129,19 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         }
 
         return true;
+    }
+
+    private void saveInitialValue() {
+        BluetoothDeviceClassData defaultClass = mStore.getDefault();
+        Log.d(TAG, "saveInitialValue(): defaultClass - " + defaultClass);
+        if (defaultClass == null) {
+            BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+            Log.d(TAG, "saveInitialValue(): bluetoothClass - " + bluetoothClass);
+            mStore.saveDefault(new BluetoothDeviceClassData(
+                    "Default",
+                    bluetoothClass.getClassOfDevice()
+            ));
+        }
     }
 
     private void fillList() {

@@ -19,13 +19,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bluetooth">
+
         <provider
             android:name=".db.BluetoothDeviceClassContentProvider"
             android:authorities="com.teamjcd.bpp.db"
             android:process=":bpp" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".BluetoothDeviceClassSettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":bpp">
             <intent-filter>
@@ -33,14 +34,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".BluetoothDeviceClassSettingsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:process=":bpp" />
+
         <activity
             android:name=".BluetoothDeviceClassEditorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":bpp" />
+
     </application>
 
 </manifest>
