@@ -147,8 +147,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 pref.setPersistent(false);
                 pref.setOnPreferenceChangeListener(this);
 
-                String summary = HexDump.toHexString(codData.getDeviceClass());
-                pref.setSummary(summary);
+                String summary = Integer.toHexString(codData.getDeviceClass());
+                pref.setSummary(("000000" + summary)
+                        .substring(summary.length()));
 
                 Log.d(TAG, "fillList(): codData.getDeviceClass - " +
                         codData.getDeviceClass() + " deviceClass - " + deviceClass);

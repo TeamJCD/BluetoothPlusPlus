@@ -109,7 +109,10 @@ public class MainActivity extends AppCompatActivity {
     private void fillDeviceClass() {
         BluetoothClass bluetoothClass = getBluetoothDeviceClass();
         if (Objects.nonNull(bluetoothClass)) {
-            deviceClassTextView.setText(HexDump.toHexString(bluetoothClass.getClassOfDevice()));
+            mStore.getAll().stream()
+                    .filter(codData -> codData.getDeviceClass() == bluetoothClass.getClassOfDevice())
+                    .findFirst()
+                    .ifPresent(codData -> deviceClassTextView.setText(codData.getName()));
         }
     }
 
