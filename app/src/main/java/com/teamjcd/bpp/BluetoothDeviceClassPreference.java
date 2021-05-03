@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
@@ -25,7 +24,6 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
     private static CompoundButton mCurrentChecked = null;
     private boolean mProtectFromCheckedChange = false;
     private boolean mSelectable = true;
-    private boolean mHideDetails = false;
 
     public BluetoothDeviceClassPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -71,12 +69,6 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
         super.onClick();
         Context context = getContext();
         if (context != null) {
-            if (mHideDetails) {
-                Toast.makeText(context, context.getString(
-                        R.string.cannot_change_bluetooth_device_class_toast), Toast.LENGTH_LONG).show();
-                return;
-            }
-
             int pos = Integer.parseInt(getKey());
             Uri url = ContentUris.withAppendedId(DEVICE_CLASS_URI, pos);
             Intent editIntent = new Intent(getContext(), BluetoothDeviceClassEditorActivity.class);
@@ -84,10 +76,6 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
             editIntent.putExtra(URI_EXTRA, url);
             context.startActivity(editIntent);
         }
-    }
-
-    public boolean isChecked() {
-        return getKey().equals(mSelectedKey);
     }
 
     public void setChecked() {
@@ -115,13 +103,5 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
 
     public void setSelectable(boolean selectable) {
         mSelectable = selectable;
-    }
-
-    public boolean getSelectable() {
-        return mSelectable;
-    }
-
-    public void setHideDetails() {
-        mHideDetails = true;
     }
 }

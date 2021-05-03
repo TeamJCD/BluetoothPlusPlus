@@ -125,16 +125,16 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (!mNewBluetoothDeviceClass && !mReadOnlyBluetoothDeviceClass) {
-            menu.add(0, MENU_DELETE, 0, R.string.menu_delete_bluetooth_device_class)
-                    .setIcon(R.drawable.ic_delete_24);
-        }
-
         menu.add(0, MENU_SAVE, 0, R.string.menu_save)
                 .setIcon(android.R.drawable.ic_menu_save);
 
         menu.add(0, MENU_CANCEL, 0, R.string.menu_cancel)
                 .setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+
+        if (!mNewBluetoothDeviceClass && !mReadOnlyBluetoothDeviceClass) {
+            menu.add(0, MENU_DELETE, 0, R.string.menu_delete)
+                    .setIcon(R.drawable.ic_delete_24);
+        }
     }
 
     @Override

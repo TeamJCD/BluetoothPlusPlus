@@ -20,7 +20,7 @@ public class BluetoothDeviceClassEditorActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Starting onCreate");
         setContentView(R.layout.activity_bluetooth_device_class_editor);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.bluetooth_device_class_edit);
+        toolbar.setTitle(R.string.screen_title_edit);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
