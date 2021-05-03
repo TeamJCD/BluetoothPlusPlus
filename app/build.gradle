@@ -105,7 +105,8 @@ task packageMagiskModule(type: Zip) {
         include "*"
         include "**/*"
     }
-    archiveName "${appName}-${android.defaultConfig.versionName}.zip"
+    archiveBaseName = "${appName}"
+    archiveVersion = "${android.defaultConfig.versionName}"
 }
 
 packageMagiskModule.dependsOn("copyApk")
