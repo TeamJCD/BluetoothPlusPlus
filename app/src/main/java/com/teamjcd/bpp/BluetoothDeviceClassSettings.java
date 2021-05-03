@@ -39,15 +39,21 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     private BluetoothAdapter mAdapter;
     private BluetoothDeviceClassStore mStore;
 
+    private boolean mUnavailable;
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                if (state == BluetoothAdapter.STATE_ON) {
-                    saveInitialValue();
+                switch (state) {
+                    case BluetoothAdapter.STATE_ON:
+                        saveInitialValue();
+                    case BluetoothAdapter.STATE_OFF:
+                        fillList();
+                        break;
+                    default:
                 }
-                fillList();
             }
         }
     };
@@ -60,17 +66,19 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mStore = getBluetoothDeviceClassStore(getContext());
 
-        // TODO do not enable bluetooth automatically, instead display info text
-        // something like "please enable bluetooth in order to manage device classes
-        if (!mAdapter.isEnabled()) {
-            mAdapter.enable();
-        } else {
+        if (mAdapter.isEnabled()) {
             saveInitialValue();
+            fillList();
         }
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        mUnavailable = mAdapter == null || !mAdapter.isEnabled();
+        if (!mUnavailable) {
+            return;
+        }
+
         addPreferencesFromResource(R.xml.bluetooth_device_class_settings);
     }
 
@@ -78,8 +86,12 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     @Override
     public void onResume() {
         super.onResume();
+
         getActivity().registerReceiver(mReceiver, mIntentFilter);
-        fillList();
+
+        if (!mUnavailable) {
+            fillList();
+        }
     }
 
     @Override
@@ -153,6 +165,10 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
             codPrefList.removeAll();
 
             BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+            if (bluetoothClass == null) {
+                return;
+            }
+
             int deviceClass = bluetoothClass.getClassOfDevice();
 
             for (BluetoothDeviceClassData codData : codDataList) {
