@@ -21,19 +21,20 @@ import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
 import java.util.List;
 
+import static com.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
 import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
 import static com.teamjcd.bpp.db.BluetoothDeviceClassStore.getBluetoothDeviceClassStore;
 
 
 public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener {
-    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_EDIT = "com.github.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT";
-    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT = "com.github.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
-    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_SETTINGS = "com.github.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.BLUETOOTH_DEVICE_CLASS_SETTINGS";
-
-    public static final String BLUETOOTH_DEVICE_CLASS_ID = "bluetooth_device_class_id";
+    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_EDIT = "com.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT";
+    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT = "com.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
 
     private static final String TAG = "BluetoothDeviceClassSettings";
+
+    private static final int MENU_NEW = Menu.FIRST;
+    private static final int MENU_RESTORE = Menu.FIRST + 1;
 
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
@@ -88,6 +89,29 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.add(0, MENU_NEW, 0,
+                getResources().getString(R.string.menu_new))
+                .setIcon(R.drawable.ic_add_24)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case MENU_NEW:
+                addNewBluetoothDeviceClass();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         Log.d(TAG, "onPreferenceChange(): Preference - " + preference
                 + ", newValue - " + newValue + ", newValue type - "
@@ -136,5 +160,12 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 codPrefList.addPreference(pref);
             }
         }
+    }
+
+    private void addNewBluetoothDeviceClass() {
+        Intent intent = new Intent(getContext(), BluetoothDeviceClassEditorActivity.class);
+        intent.setAction(ACTION_BLUETOOTH_DEVICE_CLASS_INSERT);
+        intent.putExtra(URI_EXTRA, DEVICE_CLASS_URI);
+        startActivity(intent);
     }
 }
