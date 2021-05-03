@@ -11,4 +11,9 @@
     <string name="enter_device_class">Enter Device Class:</string>
     <string name="bluetooth_adapter_not_found">Bluetooth Adapter is not found!</string>
     <string name="reset">Reset</string>
+    <string name="menu_new">New Device Class</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_cancel">Cancel</string>
+    <string name="error_name_empty">The Name field can\'t be empty.</string>
+    <string name="error_title" />
 </resources>

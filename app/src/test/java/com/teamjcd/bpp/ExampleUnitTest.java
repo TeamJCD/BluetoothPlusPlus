@@ -1,4 +1,4 @@
-package com.deepbluelabs.bpp;
+package com.teamjcd.bpp;
 
 import org.junit.Test;
 
