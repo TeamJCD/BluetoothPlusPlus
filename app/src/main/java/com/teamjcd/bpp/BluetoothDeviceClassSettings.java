@@ -149,7 +149,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         Log.d(TAG, "fillList(): codDataList - " + codDataList);
 
         if (!codDataList.isEmpty()) {
-            final PreferenceGroup codPrefList = (PreferenceGroup) findPreference("bluetooth_device_class_list");
+            final PreferenceGroup codPrefList = findPreference("bluetooth_device_class_list");
             codPrefList.removeAll();
 
             BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
