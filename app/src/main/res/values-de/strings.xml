@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_name_empty">Das Namensfeld darf nicht leer sein.</string>
+    <string name="error_device_class_invalid">Ungültige Geräteklasse.</string>
+    <string name="error_device_class_empty">Das Geräteklasse-Feld darf nicht leer sein.</string>
+
+    <string name="menu_new">Neu</string>
+    <string name="menu_save">Speichern</string>
+    <string name="menu_cancel">Verwerfen</string>
+    <string name="menu_delete">Löschen</string>
+
+    <string name="preference_title_device_class">Geräteklasse</string>
+    <string name="preference_title_name">Name</string>
+
+    <string name="screen_title_edit">Geräteklasse bearbeiten</string>
+
+</resources>
