@@ -8,7 +8,12 @@ android {
     compileSdkVersion 30
 
     signingConfigs {
-
+        debug {
+            storeFile file("${project.rootDir}/bluetoothplusplus")
+            storePassword 'bluetoothplusplus'
+            keyPassword 'bluetoothplusplus'
+            keyAlias 'bpp'
+        }
         release {
             storeFile file("${project.rootDir}/bluetoothplusplus")
             storePassword "bluetoothplusplus"

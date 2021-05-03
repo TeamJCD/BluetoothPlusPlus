@@ -16,6 +16,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
+import com.android.internal.util.HexDump;
 import com.teamjcd.bpp.db.BluetoothDeviceClassData;
 import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
@@ -146,9 +147,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 pref.setPersistent(false);
                 pref.setOnPreferenceChangeListener(this);
 
-                String summary = Integer.toHexString(codData.getDeviceClass());
-                pref.setSummary(("000000" + summary)
-                        .substring(summary.length()));
+                String summary = HexDump.toHexString(codData.getDeviceClass());
+                pref.setSummary(summary);
 
                 Log.d(TAG, "fillList(): codData.getDeviceClass - " +
                         codData.getDeviceClass() + " deviceClass - " + deviceClass);
