@@ -20,8 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bluetooth">
         <provider
-            android:name="com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider"
-            android:authorities="com.teamjcd.bpp.db" />
+            android:name=".db.BluetoothDeviceClassContentProvider"
+            android:authorities="com.teamjcd.bpp.db"
+            android:process=":bpp" />
 
         <activity
             android:name=".MainActivity"

@@ -2,33 +2,57 @@ plugins {
     id 'com.android.application'
 }
 
+def appName = "BluetoothPlusPlus";
+
 android {
     compileSdkVersion 30
+
+    signingConfigs {
+
+        release {
+            storeFile file("${project.rootDir}/bluetoothplusplus")
+            storePassword "bluetoothplusplus"
+            keyAlias "bpp"
+            keyPassword "bluetoothplusplus"
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
 
     defaultConfig {
         applicationId "com.teamjcd.bpp"
         minSdkVersion 27
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "BluetoothPlusPlus")
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         checkReleaseBuilds false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${appName}.apk";
+        }
     }
 }
 
@@ -44,3 +68,50 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task copyMagiskFiles(type: Copy) {
+    from file("src/magisk")
+    include "**/*"
+    include "*"
+    exclude "**/.keep"
+    into file("${project.buildDir}/outputs/magisk")
+    filter(ReplaceTokens, tokens: [
+            version    : "v${android.defaultConfig.versionName}".toString(),
+            versionCode: "${android.defaultConfig.versionCode}".toString(),
+            appId      : "${appName}".toString(),
+            appName    : "${appName}".toString(),
+    ])
+}
+
+copyMagiskFiles.dependsOn("assembleRelease")
+
+task copyApk(type: Copy) {
+    from file("${project.buildDir}/outputs/apk/release")
+    include "${appName}.apk"
+    into file("${project.buildDir}/outputs/magisk/system/priv-app/${appName}")
+}
+
+copyApk.dependsOn("copyMagiskFiles")
+
+task packageMagiskModule(type: Zip) {
+    from("${project.buildDir}/outputs/magisk") {
+        include "*"
+        include "**/*"
+    }
+    archiveName "${appName}-${android.defaultConfig.versionName}.zip"
+}
+
+packageMagiskModule.dependsOn("copyApk")
+
+task pushMagiskZip(type: Exec) {
+    def pushCommand = [
+            'adb', 'push',
+            "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip",
+            "/sdcard/Download/"
+    ]
+    commandLine pushCommand
+}
+
+pushMagiskZip.dependsOn("packageMagiskModule")

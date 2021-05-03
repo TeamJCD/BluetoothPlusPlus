@@ -1,0 +1,6 @@
+id=@appId@
+name=@appName@
+version=@version@
+versionCode=@versionCode@
+author=TeamJCD
+description=Enables Extended Bluetooth Controls
