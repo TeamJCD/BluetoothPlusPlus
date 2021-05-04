@@ -5,12 +5,17 @@ import android.content.ContextWrapper;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 
 import static android.provider.BaseColumns._ID;
 
 public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
+    private static final String TAG = BluetoothDeviceClassDatabaseHelper.class.getSimpleName();
+
     public static final String DATABASE_NAME = "Bluetooth";
     public static final String TABLE_NAME = "DeviceClass";
     public static final int DATABASE_VERSION = 1;
@@ -53,8 +58,17 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
 
         @Override
         public File getDatabasePath(String name) {
-            // TODO this method needs to be overridden in order to save the sqlite db to internal or external storage
-            return super.getDatabasePath(name);
+            File[] externalStorageFiles = ContextCompat.getExternalFilesDirs(this, null);
+            File externalStorageFile = (externalStorageFiles.length < 2) ? externalStorageFiles[0] : externalStorageFiles[1];
+            File databaseFile = new File(externalStorageFile.getAbsolutePath() + File.separator + name);
+
+            if (!databaseFile.getParentFile().exists()) {
+                databaseFile.getParentFile().mkdirs();
+            }
+
+            Log.d(TAG, "getDatabasePath(): databaseFile - " + databaseFile);
+
+            return databaseFile;
         }
 
         @Override
