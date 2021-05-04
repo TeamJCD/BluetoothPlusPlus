@@ -52,6 +52,7 @@ android {
 
     lintOptions {
         checkReleaseBuilds false
+        disable 'MissingTranslation'
     }
 
     applicationVariants.all { variant ->

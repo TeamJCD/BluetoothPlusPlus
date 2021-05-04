@@ -38,6 +38,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
     private BluetoothDeviceClassStore mStore;
+    private Menu mMenu;
 
     private boolean mUnavailable;
 
@@ -50,6 +51,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     case BluetoothAdapter.STATE_ON:
                         saveInitialValue();
                     case BluetoothAdapter.STATE_OFF:
+                        refreshMenu();
                         fillList();
                         break;
                     default:
@@ -66,7 +68,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mStore = getBluetoothDeviceClassStore(getContext());
 
-        if (mAdapter.isEnabled()) {
+        mUnavailable = mAdapter == null || !mAdapter.isEnabled();
+
+        if (!mUnavailable) {
             saveInitialValue();
             fillList();
         }
@@ -74,11 +78,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        mUnavailable = mAdapter == null || !mAdapter.isEnabled();
-        if (!mUnavailable) {
-            return;
-        }
-
         addPreferencesFromResource(R.xml.bluetooth_device_class_settings);
     }
 
@@ -109,9 +108,12 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
+        mMenu = menu;
+
         menu.add(0, MENU_NEW, 0,
                 getResources().getString(R.string.menu_new))
                 .setIcon(R.drawable.ic_add_24)
+                .setVisible(!mUnavailable)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
@@ -141,6 +143,10 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         }
 
         return true;
+    }
+
+    private void refreshMenu() {
+        mMenu.findItem(MENU_NEW).setVisible(!mUnavailable);
     }
 
     private void saveInitialValue() {
