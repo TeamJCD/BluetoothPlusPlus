@@ -38,7 +38,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
     private BluetoothDeviceClassStore mStore;
-    private Menu mMenu;
 
     private boolean mUnavailable;
 
@@ -53,7 +52,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     case BluetoothAdapter.STATE_ON:
                         saveInitialValue();
                     case BluetoothAdapter.STATE_OFF:
-                        refreshMenu();
                         fillList();
                         break;
                     default:
@@ -74,8 +72,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
         if (!mUnavailable) {
             saveInitialValue();
-            fillList();
         }
+
+        fillList();
     }
 
     @Override
@@ -110,12 +109,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        mMenu = menu;
-
         menu.add(0, MENU_NEW, 0,
                 getResources().getString(R.string.menu_new))
                 .setIcon(R.drawable.ic_add_24)
-                .setVisible(!mUnavailable)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
@@ -147,10 +143,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         return true;
     }
 
-    private void refreshMenu() {
-        mMenu.findItem(MENU_NEW).setVisible(!mUnavailable);
-    }
-
     private void saveInitialValue() {
         BluetoothDeviceClassData defaultClass = mStore.getDefault();
         Log.d(TAG, "saveInitialValue(): defaultClass - " + defaultClass);
@@ -173,11 +165,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
             codPrefList.removeAll();
 
             BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
-            if (bluetoothClass == null) {
-                return;
-            }
-
-            int deviceClass = bluetoothClass.getClassOfDevice();
 
             for (BluetoothDeviceClassData codData : codDataList) {
                 final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
@@ -185,16 +172,17 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 pref.setKey(Integer.toString(codData.getId()));
                 pref.setTitle(codData.getName());
                 pref.setPersistent(false);
+                pref.setSelectable(mAdapter.isEnabled());
                 pref.setOnPreferenceChangeListener(this);
 
                 String summary = Integer.toHexString(codData.getDeviceClass());
                 pref.setSummary(("000000" + summary)
                         .substring(summary.length()));
 
-                Log.d(TAG, "fillList(): codData.getDeviceClass - " +
-                        codData.getDeviceClass() + " deviceClass - " + deviceClass);
+                Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
+                        + " deviceClass - " + (bluetoothClass != null ? bluetoothClass.getClassOfDevice() : null));
 
-                if (codData.getDeviceClass() == deviceClass) {
+                if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
                     pref.setChecked();
                 }
 
