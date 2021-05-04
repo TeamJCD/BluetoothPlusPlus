@@ -1,8 +1,12 @@
 package com.teamjcd.bpp.db;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.io.File;
 
 import static android.provider.BaseColumns._ID;
 
@@ -25,7 +29,7 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
     public static final int DEVICE_CLASS_VALUE_INDEX = 2;
 
     public BluetoothDeviceClassDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(context), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -40,5 +44,28 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         throw new UnsupportedOperationException();
+    }
+
+    public static class DatabaseContext extends ContextWrapper {
+        public DatabaseContext(Context base) {
+            super(base);
+        }
+
+        @Override
+        public File getDatabasePath(String name) {
+            // TODO this method needs to be overridden in order to save the sqlite db to internal or external storage
+            return super.getDatabasePath(name);
+        }
+
+        @Override
+        public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler) {
+            return openOrCreateDatabase(name,mode, factory);
+        }
+
+        @Override
+        public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+            SQLiteDatabase result = SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), null);
+            return result;
+        }
     }
 }
