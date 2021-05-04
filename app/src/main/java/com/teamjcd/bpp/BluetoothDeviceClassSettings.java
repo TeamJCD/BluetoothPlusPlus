@@ -47,6 +47,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                mUnavailable = state != BluetoothAdapter.STATE_ON;
+
                 switch (state) {
                     case BluetoothAdapter.STATE_ON:
                         saveInitialValue();
