@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
@@ -21,6 +22,7 @@ import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
 import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
 import static com.teamjcd.bpp.db.BluetoothDeviceClassStore.getBluetoothDeviceClassStore;
@@ -32,6 +34,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT = "com.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
 
     private static final String TAG = "BluetoothDeviceClassSettings";
+
+    private static final int REQUEST_ENABLE_BT = 1;
 
     private static final int MENU_NEW = Menu.FIRST;
 
@@ -70,11 +74,24 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
         mUnavailable = mAdapter == null || !mAdapter.isEnabled();
 
-        if (!mUnavailable) {
+        if (mUnavailable) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        } else {
             saveInitialValue();
         }
 
         fillList();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
+            saveInitialValue();
+            fillList();
+        }
     }
 
     @Override
