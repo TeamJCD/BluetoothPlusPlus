@@ -11,7 +11,7 @@ def appName = "BluetoothPlusPlus"
 ext {
     grgit = Grgit.open(currentDir: projectDir)
     projectVersionCode = grgit.log().size()
-    projectVersionName = "v${project.version}"
+    projectVersionName = "${project.version}"
 }
 
 android {
