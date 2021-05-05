@@ -32,7 +32,7 @@ android {
         minSdkVersion 27
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27
-        versionCode project.version.findAll(/\d+/)*.toInteger()
+        versionCode "${project.version}".findAll(/\d+/)*.toInteger()
         versionName "v${project.version}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -71,7 +71,7 @@ githubRelease {
     dryRun true
 }
 
-tasks.findByName('githubRelease').dependsOn('copyMagiskFiles')
+tasks.findByName('githubRelease').dependsOn('packageMagiskModule')
 
 dependencies {
 
