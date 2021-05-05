@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_ID;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_DEVICE_CLASS;
 import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
 import static com.github.teamjcd.bpp.db.BluetoothDeviceClassData.readFromCursor;
 import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.PROJECTION;
@@ -51,7 +51,7 @@ public class BluetoothDeviceClassStore {
     }
 
     public BluetoothDeviceClassData getDefault() {
-        return get(DEFAULT_ID);
+        return get(Uri.withAppendedPath(DEVICE_CLASS_URI, DEFAULT_DEVICE_CLASS));
     }
 
     public BluetoothDeviceClassData get(Uri btDeviceClassUri) {
@@ -82,6 +82,7 @@ public class BluetoothDeviceClassStore {
     }
 
     public Uri saveDefault(BluetoothDeviceClassData btDeviceClass) {
+        btDeviceClass.setIsDefault(1);
         return save(btDeviceClass);
     }
 
@@ -108,9 +109,6 @@ public class BluetoothDeviceClassStore {
     }
 
     public int delete(int id) {
-        if (id == DEFAULT_ID) {
-            return 0;
-        }
         return delete(Uri.withAppendedPath(DEVICE_CLASS_URI, Integer.toString(id)));
     }
 

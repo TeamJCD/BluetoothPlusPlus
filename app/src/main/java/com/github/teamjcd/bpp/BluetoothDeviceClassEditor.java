@@ -93,7 +93,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
             mBluetoothDeviceClassData = new BluetoothDeviceClassData();
         }
 
-        mReadOnlyBluetoothDeviceClass = !mBluetoothDeviceClassData.isUserEditable();
+        mReadOnlyBluetoothDeviceClass = mBluetoothDeviceClassData.isDefault();
 
         if (mReadOnlyBluetoothDeviceClass) {
             mClass.setEnabled(false);
