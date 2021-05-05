@@ -5,6 +5,14 @@ plugins {
 
 def appName = "BluetoothPlusPlus"
 
+project.ext.evalVersionCode = {
+    return project.version.findAll(/\d+/)*.toInteger()
+}
+
+project.ext.evalVersionName = {
+    return "v${project.version}"
+}
+
 android {
     compileSdkVersion 30
 
@@ -32,8 +40,8 @@ android {
         minSdkVersion 27
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27
-        versionCode "${project.version}".findAll(/\d+/)*.toInteger()
-        versionName "v${project.version}"
+        versionCode evalVersionCode
+        versionName evalVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,9 +73,8 @@ android {
 
 githubRelease {
     token getProperty('github.token')
+    tagName evalVersionName
     releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
-
-    overwrite true
     dryRun true
 }
 
