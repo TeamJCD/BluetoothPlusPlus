@@ -105,10 +105,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         super.onResume();
 
         getActivity().registerReceiver(mReceiver, mIntentFilter);
-
-        if (!mUnavailable) {
-            fillList();
-        }
+        fillList();
     }
 
     @Override
