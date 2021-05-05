@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
-  <privapp-permissions package="com.teamjcd.bpp">
+  <privapp-permissions package="com.github.teamjcd.bpp">
     <permission name="android.permission.BLUETOOTH_PRIVILEGED"/>
     <permission name="android.permission.BLUETOOTH"/>
     <permission name="android.permission.BLUETOOTH_ADMIN"/>

@@ -1,4 +1,4 @@
-package com.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_ID;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassData.readFromCursor;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.PROJECTION;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_ID;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassData.readFromCursor;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.PROJECTION;
 
 
 public class BluetoothDeviceClassStore {

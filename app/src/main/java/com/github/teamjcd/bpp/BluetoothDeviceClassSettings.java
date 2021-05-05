@@ -1,4 +1,4 @@
-package com.teamjcd.bpp;
+package com.github.teamjcd.bpp;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
@@ -17,21 +17,21 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
-import com.teamjcd.bpp.db.BluetoothDeviceClassData;
-import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
+import com.github.teamjcd.bpp.db.BluetoothDeviceClassData;
+import com.github.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassStore.getBluetoothDeviceClassStore;
+import static com.github.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassStore.getBluetoothDeviceClassStore;
 
 
 public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener {
-    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_EDIT = "com.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT";
-    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT = "com.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
+    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_EDIT = "com.github.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT";
+    public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT = "com.github.teamjcd.android.settings.bluetooth.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
 
     private static final String TAG = "BluetoothDeviceClassSettings";
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.teamjcd.bpp">
+    package="com.github.teamjcd.bpp">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -22,7 +22,7 @@
 
         <provider
             android:name=".db.BluetoothDeviceClassContentProvider"
-            android:authorities="com.teamjcd.bpp.db"
+            android:authorities="com.github.teamjcd.bpp.db"
             android:process=":bpp" />
 
         <activity

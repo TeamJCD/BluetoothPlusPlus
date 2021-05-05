@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/bluetooth_device_class_settings"
-        class="com.teamjcd.bpp.BluetoothDeviceClassSettings"
+        class="com.github.teamjcd.bpp.BluetoothDeviceClassSettings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="BluetoothDeviceClassSettings" />

@@ -1,4 +1,4 @@
-package com.teamjcd.bpp;
+package com.github.teamjcd.bpp;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -13,9 +13,9 @@ import android.widget.RadioButton;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
-import static com.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
-import static com.teamjcd.bpp.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
+import static com.github.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
+import static com.github.teamjcd.bpp.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
 
 public class BluetoothDeviceClassPreference extends Preference implements CompoundButton.OnCheckedChangeListener {
     private final static String TAG = "BluetoothDeviceClassPreference";

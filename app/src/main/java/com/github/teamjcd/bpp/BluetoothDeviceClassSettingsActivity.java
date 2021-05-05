@@ -1,4 +1,4 @@
-package com.teamjcd.bpp;
+package com.github.teamjcd.bpp;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,22 +9,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-public class BluetoothDeviceClassEditorActivity extends AppCompatActivity {
-    private static final String LOG_TAG = BluetoothDeviceClassEditorActivity.class.getName();
+public class BluetoothDeviceClassSettingsActivity extends AppCompatActivity {
+    private static final String LOG_TAG = BluetoothDeviceClassSettingsActivity.class.getName();
 
-    Fragment mEditorFrag;
+    Fragment mSettingsFrag;
 
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         Log.d(LOG_TAG, "Starting onCreate");
-        setContentView(R.layout.activity_bluetooth_device_class_editor);
+        setContentView(R.layout.activity_bluetooth_device_class_settings);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.screen_title_edit);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mEditorFrag = getSupportFragmentManager().findFragmentById(R.id.bluetooth_device_class_editor);
+        mSettingsFrag = getSupportFragmentManager().findFragmentById(R.id.bluetooth_device_class_settings);
     }
 
     @Override
@@ -35,12 +32,12 @@ public class BluetoothDeviceClassEditorActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mEditorFrag.onCreateOptionsMenu(menu, getMenuInflater());
+        mSettingsFrag.onCreateOptionsMenu(menu, getMenuInflater());
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mEditorFrag.onOptionsItemSelected(item);
+        return mSettingsFrag.onOptionsItemSelected(item);
     }
 }

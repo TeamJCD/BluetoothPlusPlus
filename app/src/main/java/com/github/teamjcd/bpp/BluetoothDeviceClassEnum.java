@@ -1,4 +1,4 @@
-package com.teamjcd.bpp;
+package com.github.teamjcd.bpp;
 
 import java.util.Arrays;
 import java.util.Optional;

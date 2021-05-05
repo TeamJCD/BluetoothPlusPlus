@@ -1,4 +1,4 @@
-package com.teamjcd.bpp;
+package com.github.teamjcd.bpp;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,9 +21,9 @@ import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider;
-import com.teamjcd.bpp.db.BluetoothDeviceClassData;
-import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
+import com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider;
+import com.github.teamjcd.bpp.db.BluetoothDeviceClassData;
+import com.github.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
 public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
         implements OnPreferenceChangeListener, OnKeyListener {

@@ -1,19 +1,4 @@
-package com.teamjcd.bpp;
-
-import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.util.Log;
-
-import androidx.lifecycle.LifecycleObserver;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceScreen;
-
-import com.teamjcd.bpp.db.BluetoothDeviceClassStore;
+package com.github.teamjcd.bpp;
 
 
 public class BluetoothDeviceClassPreferenceController {

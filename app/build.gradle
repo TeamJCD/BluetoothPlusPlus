@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.teamjcd.bpp"
+        applicationId "com.github.teamjcd.bpp"
         minSdkVersion 27
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27

@@ -1,4 +1,4 @@
-package com.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.db;
 
 import android.content.Context;
 import android.content.ContextWrapper;

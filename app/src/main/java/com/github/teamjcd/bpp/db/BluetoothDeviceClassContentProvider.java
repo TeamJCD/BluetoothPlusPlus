@@ -1,4 +1,4 @@
-package com.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,12 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import static android.provider.BaseColumns._ID;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.TABLE_NAME;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.TABLE_NAME;
 
 public class BluetoothDeviceClassContentProvider extends ContentProvider {
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    public static final String AUTHORITY = "com.teamjcd.bpp.db";
+    public static final String AUTHORITY = "com.github.teamjcd.bpp.db";
     private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
     private static final String DEVICE_CLASS_TABLE = "device_class";
     public static final Uri DEVICE_CLASS_URI = Uri.withAppendedPath(BASE_URI, DEVICE_CLASS_TABLE);

@@ -1,15 +1,15 @@
-package com.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import static com.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_ID;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME_INDEX;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE_INDEX;
-import static com.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.ID_INDEX;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_ID;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME_INDEX;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE_INDEX;
+import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.ID_INDEX;
 
 public class BluetoothDeviceClassData implements BaseColumns {
     private int id;
