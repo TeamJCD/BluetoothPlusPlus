@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'com.github.breadmoirai.github-release' version '2.2.12'
+    id 'org.ajoberstar.grgit'
 }
+
+import org.ajoberstar.grgit.Grgit
 
 def appName = "BluetoothPlusPlus"
 
-project.ext.evalVersionCode = {
-    return project.version.findAll(/\d+/)*.toInteger()
-}
-
-project.ext.evalVersionName = {
-    return "v${project.version}"
+ext {
+    grgit = Grgit.open(currentDir: projectDir)
+    projectVersionCode = grgit.log().size()
+    projectVersionName = "v${project.version}"
 }
 
 android {
@@ -40,8 +41,8 @@ android {
         minSdkVersion 27
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27
-        versionCode evalVersionCode
-        versionName evalVersionName
+        versionCode projectVersionCode
+        versionName projectVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -73,7 +74,7 @@ android {
 
 githubRelease {
     token getProperty('github.token')
-    tagName evalVersionName
+    tagName projectVersionName
     releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
     dryRun true
 }
@@ -140,3 +141,10 @@ task pushMagiskZip(type: Exec) {
 }
 
 pushMagiskZip.dependsOn("packageMagiskModule")
+
+task printVersion() {
+    doLast {
+        println("Version Name: $projectVersionName")
+        println("Version Code: $projectVersionCode")
+    }
+}
