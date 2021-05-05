@@ -75,7 +75,7 @@ android {
 githubRelease {
     token getProperty('github.token')
     owner "TeamJCD"
-    repo "BluetoothPlusPlus"
+    repo appName
     tagName projectVersionName
     releaseName "Bluetooth++ ${projectVersionName}"
     releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
