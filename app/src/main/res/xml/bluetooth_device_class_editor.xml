@@ -6,7 +6,7 @@
         android:dialogTitle="@string/preference_title_name"
         android:key="bluetooth_device_class_name"
         android:singleLine="true"
-        android:inputType="text"
+        android:inputType="textCapWords"
         android:persistent="false"
         />
     <EditTextPreference
