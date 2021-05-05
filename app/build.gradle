@@ -76,7 +76,6 @@ githubRelease {
     token getProperty('github.token')
     tagName projectVersionName
     releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
-    dryRun true
 }
 
 tasks.findByName('githubRelease').dependsOn('packageMagiskModule')
