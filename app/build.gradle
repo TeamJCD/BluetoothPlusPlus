@@ -77,6 +77,7 @@ githubRelease {
     owner "TeamJCD"
     repo "BluetoothPlusPlus"
     tagName projectVersionName
+    releaseName "Bluetooth++ ${projectVersionName}"
     releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
 }
 
