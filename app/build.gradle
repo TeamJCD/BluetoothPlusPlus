@@ -32,8 +32,8 @@ android {
         minSdkVersion 27
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode project.version.findAll(/\d+/)*.toInteger()
+        versionName "v${project.version}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,7 +65,7 @@ android {
 
 githubRelease {
     token getProperty('github.token')
-    releaseAssets "${project.buildDir}/outputs/magisk"
+    releaseAssets "${project.buildDir}/distributions/${appName}-${android.defaultConfig.versionName}.zip"
 
     overwrite true
     dryRun true
