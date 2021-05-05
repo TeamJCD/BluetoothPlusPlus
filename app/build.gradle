@@ -103,7 +103,7 @@ task copyMagiskFiles(type: Copy) {
     exclude "**/.keep"
     into file("${project.buildDir}/outputs/magisk")
     filter(ReplaceTokens, tokens: [
-            version    : "v${android.defaultConfig.versionName}".toString(),
+            version    : "${android.defaultConfig.versionName}".toString(),
             versionCode: "${android.defaultConfig.versionCode}".toString(),
             appId      : "${appName}".toString(),
             appName    : "${appName}".toString(),
