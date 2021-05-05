@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_device_class_empty">O campo da classe do dispositivo não pode estar vazia.</string>
+    <string name="error_device_class_invalid">Classe de dispositivo inválida.</string>
+    <string name="error_name_empty">A caixa de nome não pode estar vazia.</string>
+
+    <string name="menu_new">Novo</string>
+    <string name="menu_save">Salvar</string>
+    <string name="menu_cancel">Cancelar</string>
+    <string name="menu_delete">Excluir</string>
+
+    <string name="preference_title_device_class">Classe do dispositivo</string>
+    <string name="preference_title_name">Nome</string>
+
+    <string name="screen_title_edit">Editar classe do dispositivo</string>
+
+</resources>
