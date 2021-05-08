@@ -32,7 +32,7 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
     }
 
     public BluetoothDeviceClassPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.bluetoothDeviceClassPreferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.preferenceFragmentCompatStyle);
         setWidgetLayoutResource(R.layout.bluetooth_device_class_preference_layout);
     }
 
