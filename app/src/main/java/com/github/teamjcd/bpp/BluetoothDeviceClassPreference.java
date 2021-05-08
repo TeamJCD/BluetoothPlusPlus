@@ -1,5 +1,6 @@
 package com.github.teamjcd.bpp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +21,9 @@ import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVI
 public class BluetoothDeviceClassPreference extends Preference implements CompoundButton.OnCheckedChangeListener {
     private final static String TAG = "BluetoothDeviceClassPreference";
 
-    private String mSelectedKey = null;
-    private CompoundButton mCurrentChecked = null;
+    private static String mSelectedKey = null;
+    @SuppressLint("StaticFieldLeak")
+    private static CompoundButton mCurrentChecked = null;
     private boolean mProtectFromCheckedChange = false;
     private boolean mSelectable = true;
 
