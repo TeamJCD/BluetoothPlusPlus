@@ -81,6 +81,7 @@ public class BluetoothDeviceClassStore {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Uri saveDefault(BluetoothDeviceClassData btDeviceClass) {
         btDeviceClass.setIsDefault(1);
         return save(btDeviceClass);
@@ -91,6 +92,7 @@ public class BluetoothDeviceClassStore {
         return context.getContentResolver().insert(DEVICE_CLASS_URI, values);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public int update(BluetoothDeviceClassData btDeviceClass) {
         return update(btDeviceClass.getId(), btDeviceClass);
     }
@@ -108,6 +110,7 @@ public class BluetoothDeviceClassStore {
         );
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public int delete(int id) {
         return delete(Uri.withAppendedPath(DEVICE_CLASS_URI, Integer.toString(id)));
     }

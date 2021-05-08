@@ -255,7 +255,8 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
         if (errMsg == null) {
             try {
-                int validDeviceClass = Integer.parseUnsignedInt(cod, 16);
+                //noinspection ResultOfMethodCallIgnored
+                Integer.parseUnsignedInt(cod, 16);
             } catch (Exception e) {
                 errMsg = getResources().getString(R.string.error_device_class_invalid);
             }
@@ -280,6 +281,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
         @Override
         @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            //noinspection ConstantConditions
             return new AlertDialog.Builder(getContext())
                     .setTitle(R.string.error_title)
                     .setPositiveButton(android.R.string.ok, null)

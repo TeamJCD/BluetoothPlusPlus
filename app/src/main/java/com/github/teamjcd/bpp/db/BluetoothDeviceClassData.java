@@ -56,6 +56,7 @@ public class BluetoothDeviceClassData implements BaseColumns {
         this.deviceClass = deviceClass;
     }
 
+    @SuppressWarnings("unused")
     public int getIsDefault() {
         return isDefault;
     }
