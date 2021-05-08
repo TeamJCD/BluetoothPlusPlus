@@ -195,6 +195,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     pref.setPersistent(false);
                     pref.setSelectable(mAdapter.isEnabled());
                     pref.setOnPreferenceChangeListener(this);
+                    pref.setIconSpaceReserved(false);
 
                     String summary = Integer.toHexString(codData.getDeviceClass());
                     pref.setSummary(("000000" + summary)
