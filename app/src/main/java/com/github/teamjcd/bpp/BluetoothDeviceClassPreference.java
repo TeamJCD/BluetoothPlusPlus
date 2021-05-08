@@ -20,8 +20,8 @@ import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVI
 public class BluetoothDeviceClassPreference extends Preference implements CompoundButton.OnCheckedChangeListener {
     private final static String TAG = "BluetoothDeviceClassPreference";
 
-    private static String mSelectedKey = null;
-    private static CompoundButton mCurrentChecked = null;
+    private String mSelectedKey = null;
+    private CompoundButton mCurrentChecked = null;
     private boolean mProtectFromCheckedChange = false;
     private boolean mSelectable = true;
 
@@ -43,7 +43,7 @@ public class BluetoothDeviceClassPreference extends Preference implements Compou
         super.onBindViewHolder(view);
 
         View widget = view.findViewById(R.id.bluetooth_device_class_radiobutton);
-        if ((widget != null) && widget instanceof RadioButton) {
+        if (widget instanceof RadioButton) {
             RadioButton rb = (RadioButton) widget;
             if (mSelectable) {
                 rb.setOnCheckedChangeListener(this);

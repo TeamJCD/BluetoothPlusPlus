@@ -23,7 +23,8 @@
         <provider
             android:name=".db.BluetoothDeviceClassContentProvider"
             android:authorities="com.github.teamjcd.bpp.db"
-            android:process=":bpp" />
+            android:process=":bpp"
+            android:exported="false" />
 
         <activity
             android:name=".BluetoothDeviceClassSettingsActivity"

@@ -66,8 +66,13 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
             File externalStorageFile = (externalStorageFiles.length < 2) ? externalStorageFiles[0] : externalStorageFiles[1];
             File databaseFile = new File(externalStorageFile.getAbsolutePath() + File.separator + name);
 
-            if (!databaseFile.getParentFile().exists()) {
-                databaseFile.getParentFile().mkdirs();
+            if (databaseFile.getParentFile() != null && !databaseFile.getParentFile().exists()) {
+                if (!databaseFile.getParentFile().mkdirs()) {
+                    Log.e(TAG, "getDatabasePath(): Unable to create directory "
+                            + databaseFile.getParentFile());
+
+                    return super.getDatabasePath(name);
+                }
             }
 
             Log.d(TAG, "getDatabasePath(): databaseFile - " + databaseFile);
@@ -82,8 +87,7 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
 
         @Override
         public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
-            SQLiteDatabase result = SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), null);
-            return result;
+            return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), null);
         }
     }
 }

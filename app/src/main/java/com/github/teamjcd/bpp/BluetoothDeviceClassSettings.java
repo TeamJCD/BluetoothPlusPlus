@@ -12,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
@@ -104,23 +106,26 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public void onResume() {
         super.onResume();
 
-        getActivity().registerReceiver(mReceiver, mIntentFilter);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.registerReceiver(mReceiver, mIntentFilter);
+        }
+
         fillList();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(mReceiver);
+
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.unregisterReceiver(mReceiver);
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         menu.add(0, MENU_NEW, 0,
@@ -130,12 +135,12 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case MENU_NEW:
-                addNewBluetoothDeviceClass();
-                return true;
+
+        if (item.getItemId() == MENU_NEW) {
+            addNewBluetoothDeviceClass();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -176,31 +181,34 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
         if (!codDataList.isEmpty()) {
             final PreferenceGroup codPrefList = findPreference("bluetooth_device_class_list");
-            codPrefList.removeAll();
 
-            BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+            if (codPrefList != null) {
+                codPrefList.removeAll();
 
-            for (BluetoothDeviceClassData codData : codDataList) {
-                final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
+                BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
 
-                pref.setKey(Integer.toString(codData.getId()));
-                pref.setTitle(codData.getName());
-                pref.setPersistent(false);
-                pref.setSelectable(mAdapter.isEnabled());
-                pref.setOnPreferenceChangeListener(this);
+                for (BluetoothDeviceClassData codData : codDataList) {
+                    final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
 
-                String summary = Integer.toHexString(codData.getDeviceClass());
-                pref.setSummary(("000000" + summary)
-                        .substring(summary.length()));
+                    pref.setKey(Integer.toString(codData.getId()));
+                    pref.setTitle(codData.getName());
+                    pref.setPersistent(false);
+                    pref.setSelectable(mAdapter.isEnabled());
+                    pref.setOnPreferenceChangeListener(this);
 
-                Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
-                        + " deviceClass - " + (bluetoothClass != null ? bluetoothClass.getClassOfDevice() : null));
+                    String summary = Integer.toHexString(codData.getDeviceClass());
+                    pref.setSummary(("000000" + summary)
+                            .substring(summary.length()));
 
-                if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
-                    pref.setChecked();
+                    Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
+                            + " deviceClass - " + (bluetoothClass != null ? bluetoothClass.getClassOfDevice() : null));
+
+                    if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
+                        pref.setChecked();
+                    }
+
+                    codPrefList.addPreference(pref);
                 }
-
-                codPrefList.addPreference(pref);
             }
         }
     }

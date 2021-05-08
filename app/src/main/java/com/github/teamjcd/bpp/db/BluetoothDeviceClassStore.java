@@ -16,7 +16,7 @@ import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.PROJE
 
 
 public class BluetoothDeviceClassStore {
-    private Context context;
+    private final Context context;
 
     private BluetoothDeviceClassStore(Context context) {
         this.context = context;

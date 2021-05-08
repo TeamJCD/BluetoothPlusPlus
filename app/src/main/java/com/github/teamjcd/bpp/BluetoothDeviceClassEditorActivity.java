@@ -3,6 +3,7 @@ package com.github.teamjcd.bpp;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 public class BluetoothDeviceClassEditorActivity extends BluetoothDeviceClassActivity {
@@ -21,8 +22,11 @@ public class BluetoothDeviceClassEditorActivity extends BluetoothDeviceClassActi
 
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
 
         setFragment(getSupportFragmentManager().findFragmentById(R.id.bluetooth_device_class_editor));
     }
