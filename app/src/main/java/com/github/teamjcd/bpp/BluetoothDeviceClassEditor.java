@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -62,8 +63,6 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
             return;
         }
 
-        initBluetoothDeviceClassEditorUi();
-
         Uri uri = null;
         if (action.equals(BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT)) {
             uri = intent.getParcelableExtra(URI_EXTRA);
@@ -107,6 +106,11 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.bluetooth_device_class_editor);
+        initBluetoothDeviceClassEditorUi();
+
+        mName.setOnBindEditTextListener(editText -> {
+            editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        });
     }
 
     @Override
