@@ -111,8 +111,10 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
         addPreferencesFromResource(R.xml.bluetooth_device_class_editor);
         initBluetoothDeviceClassEditorUi();
 
-        mName.setOnBindEditTextListener(editText ->
-                editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS));
+        mName.setOnBindEditTextListener(editText -> {
+            editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+            editText.setSelection(editText.getText().length());
+        });
     }
 
     @Override
