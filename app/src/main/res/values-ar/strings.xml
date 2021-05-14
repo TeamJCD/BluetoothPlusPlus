@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="error_device_class_empty">لا يمكن أن يكون حقل فئة الجهاز فارغًا.</string>
+    <string name="error_device_class_invalid">فئة الجهاز غير صالحة.</string>
+    <string name="error_name_empty">لا يمكن أن يكون حقل الاسم فارغًا.</string>
+
+    <string name="menu_new">جديد</string>
+    <string name="menu_save">حفظ</string>
+    <string name="menu_cancel">تجاهل</string>
+    <string name="menu_delete">حذف</string>
+
+    <string name="preference_title_device_class">فئة الجهاز</string>
+    <string name="preference_title_name">الاسم</string>
+
+    <string name="screen_title_edit">تحرير فئة الجهاز</string>
+
+</resources>
