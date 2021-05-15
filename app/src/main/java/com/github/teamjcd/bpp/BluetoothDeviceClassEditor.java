@@ -210,10 +210,8 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
         if (firstTime) {
             mName.setText(mBluetoothDeviceClassData.getName());
             if (!mNewBluetoothDeviceClass) {
-                String mClassText = Integer.toHexString(
-                        mBluetoothDeviceClassData.getDeviceClass());
-                mClass.setText(("000000" + mClassText)
-                        .substring(mClassText.length()));
+                mClass.setText(BluetoothDeviceClassUtils
+                        .format(mBluetoothDeviceClassData.getDeviceClass()));
             }
         }
 
@@ -231,7 +229,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
         mBluetoothDeviceClassData.setName(mName.getText());
 
         if (!mReadOnlyBluetoothDeviceClass) {
-            mBluetoothDeviceClassData.setDeviceClass(Integer.parseUnsignedInt(mClass.getText(), 16));
+            mBluetoothDeviceClassData.setDeviceClass(BluetoothDeviceClassUtils.parse(mClass.getText()));
         }
 
         if (mNewBluetoothDeviceClass) {
@@ -257,8 +255,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
         if (errMsg == null) {
             try {
-                //noinspection ResultOfMethodCallIgnored
-                Integer.parseUnsignedInt(cod, 16);
+                BluetoothDeviceClassUtils.parse(cod);
             } catch (Exception e) {
                 errMsg = getResources().getString(R.string.error_device_class_invalid);
             }

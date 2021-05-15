@@ -37,6 +37,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
     private static final String TAG = "BluetoothDeviceClassSettings";
 
+    private static final int FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BluetoothDeviceClassUtils.parse("5a020c");
+
     private static final int REQUEST_ENABLE_BT = 1;
 
     private static final int MENU_NEW = Menu.FIRST;
@@ -170,7 +172,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
             Log.d(TAG, "saveInitialValue(): bluetoothClass - " + bluetoothClass);
             mStore.saveDefault(new BluetoothDeviceClassData(
                     "Default",
-                    bluetoothClass.getClassOfDevice()
+                    bluetoothClass != null ?
+                            bluetoothClass.getClassOfDevice() :
+                            FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS
             ));
         }
     }
@@ -197,14 +201,14 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     pref.setOnPreferenceChangeListener(this);
                     pref.setIconSpaceReserved(false);
 
-                    String summary = Integer.toHexString(codData.getDeviceClass());
-                    pref.setSummary(("000000" + summary)
-                            .substring(summary.length()));
+                    pref.setSummary(BluetoothDeviceClassUtils.format(codData.getDeviceClass()));
 
                     Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
                             + " deviceClass - " + (bluetoothClass != null ? bluetoothClass.getClassOfDevice() : null));
 
                     if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
+                        pref.setChecked();
+                    } else if (bluetoothClass == null && codData.getDeviceClass() == FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS) {
                         pref.setChecked();
                     }
 
