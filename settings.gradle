@@ -1,2 +1,3 @@
-rootProject.name = "Bluetooth++"
+rootProject.name = 'Bluetooth++'
+
 include ':app'
