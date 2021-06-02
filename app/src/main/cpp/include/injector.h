@@ -1,7 +1,7 @@
-#include <sys/types.h>
-
 #ifndef BLUETOOTH_INJECTOR_H
 #define BLUETOOTH_INJECTOR_H
+
+#include <sys/types.h>
 
 #if defined(__aarch64__)
 #define LIBC_PATH_OLD		"/system/lib64/libc.so"
@@ -20,5 +20,7 @@
 #endif
 
 long call_dlopen(pid_t pid);
+long call_dlsym(pid_t pid, long so_handle, const char* symbol);
+long call_dlclose(pid_t pid, long so_handle);
 
 #endif //BLUETOOTH_INJECTOR_H

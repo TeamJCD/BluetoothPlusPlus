@@ -1,6 +1,7 @@
 #include <cstring>
 #include <jni.h>
 #include "bpp_jni.h"
+#include "btif.h"
 #include "injector.h"
 #include "ptrace.h"
 #include "utils.h"
@@ -21,8 +22,32 @@ extern "C" {
     JNIEXPORT jint JNICALL
     Java_com_github_teamjcd_bpp_BluetoothDeviceClassSettings_getBluetoothClassNative(__unused JNIEnv* env,
                                                                                      __unused jobject obj) {
-        // TODO
-        return 0;
+        if (!qti) {
+            return -1;
+        }
+
+        ptrace_attach(pid);
+
+        long so_handle = call_dlopen(pid);
+        if (!so_handle) {
+            ALOGE("setBluetoothClassNative - Injection failed");
+            return -1;
+        }
+
+        char buf[512];
+
+        bt_property_t prop;
+        prop.type = BT_PROPERTY_CLASS_OF_DEVICE;
+        prop.val = (void*) buf;
+        prop.len = sizeof(buf);
+
+        call_dlsym(pid, so_handle, "btif_get_device_class"); // TODO add prop as argument
+
+        call_dlclose(pid, so_handle);
+
+        ptrace_detach(pid);
+
+        return *((int*) prop.val);
     }
 
     JNIEXPORT jboolean JNICALL
@@ -46,7 +71,11 @@ extern "C" {
         DEV_CLASS *dev_class = nullptr;
         memcpy(dev_class, val, DEV_CLASS_LEN);
 
-        //call_dlsym?
+        ALOGD("setBluetoothClassNative - dev_class: 0x%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
+
+        call_dlsym(pid, so_handle, "btif_set_device_class"); // TODO add dev_class as argument
+
+        call_dlclose(pid, so_handle);
 
         ptrace_detach(pid);
         return JNI_TRUE;

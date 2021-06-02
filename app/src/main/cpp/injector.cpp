@@ -61,11 +61,11 @@ long call_munmap(pid_t pid, long addr, size_t length) {
 
 long call_dlopen(pid_t pid) {
     long function_addr = get_remote_function_addr(pid, get_linker_path(), ((long) (void*) dlopen));
-    ALOGD("function address: %lx", function_addr);
+    ALOGD("call_dlopen - function_addr: %lx", function_addr);
 
     long mmap_ret = call_mmap(pid, 0x400);
 
-    ptrace_write(pid, (uint8_t*)mmap_ret, (uint8_t*) LIBRARY_PATH, strlen(LIBRARY_PATH) + 1);
+    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) LIBRARY_PATH, strlen(LIBRARY_PATH) + 1);
 
     long vndk_return_addr = get_module_base_addr(pid, VNDK_LIB_PATH);
 
@@ -78,4 +78,33 @@ long call_dlopen(pid_t pid) {
     call_munmap(pid, mmap_ret, 0x400);
 
     return ret;
+}
+
+long call_dlsym(pid_t pid, long so_handle, const char* symbol) {
+    long function_addr = get_remote_function_addr(pid, get_linker_path(), ((long) (void*) dlsym));
+    ALOGD("call_dlsym - function_addr: %lx, pid: %d, so_handle: %lx, symbol: %s", function_addr, pid, so_handle, symbol);
+
+    long mmap_ret = call_mmap(pid, 0x400);
+
+    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) symbol, strlen(symbol) + 1);
+
+    long params[2];
+    params[0] = so_handle;
+    params[1] = mmap_ret;
+
+    long ret = call_remote_function(pid, function_addr, params, 2);
+
+    call_munmap(pid, mmap_ret, 0x400);
+
+    return ret;
+}
+
+long call_dlclose(pid_t pid, long so_handle) {
+    long function_addr = get_remote_function_addr(pid, get_linker_path(), ((long) (void*) dlclose));
+    ALOGD("call_dlclose - function_addr: %lx, pid: %d, so_handle: %lx", function_addr, pid, so_handle);
+
+    long params[1];
+    params[0] = so_handle;
+
+    return call_remote_function(pid, function_addr, params, 1);
 }

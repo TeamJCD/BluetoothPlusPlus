@@ -159,7 +159,7 @@ long call_remote_function_from_namespace(pid_t pid, long function_addr, long ret
     ptrace_set_regs(pid, &backup_regs);
 
     ALOGD("call remote function %lx with %zu arguments, return value is %llx",
-          function_addr, argc, (long long)regs.ARM_r0);
+          function_addr, argc, (long long) regs.ARM_r0);
 
     return regs.ARM_r0;
 }

@@ -1,7 +1,7 @@
-#include <sys/types.h>
-
 #ifndef BLUETOOTH_PTRACE_H
 #define BLUETOOTH_PTRACE_H
+
+#include <sys/types.h>
 
 #define CPSR_T_MASK (1u << 5)
 
