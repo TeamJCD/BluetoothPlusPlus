@@ -34,20 +34,15 @@ extern "C" {
             return -1;
         }
 
-        char buf[512];
+        DEV_CLASS buf;
 
-        bt_property_t prop;
-        prop.type = BT_PROPERTY_CLASS_OF_DEVICE;
-        prop.val = (void*) buf;
-        prop.len = sizeof(buf);
-
-        call_dlsym(pid, so_handle, "btif_get_device_class"); // TODO add prop as argument
+        call_dlsym(pid, so_handle, "btif_get_device_class"); // TODO add buf as argument
 
         call_dlclose(pid, so_handle);
 
         ptrace_detach(pid);
 
-        return *((int*) prop.val);
+        return *buf;
     }
 
     JNIEXPORT jboolean JNICALL

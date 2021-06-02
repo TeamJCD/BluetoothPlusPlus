@@ -2,7 +2,12 @@
 #include "btif.h"
 #include "utils.h"
 
-void btif_get_device_class(bt_property_t prop) {
+void btif_get_device_class(DEV_CLASS buf) {
+    bt_property_t prop;
+    prop.type = BT_PROPERTY_CLASS_OF_DEVICE;
+    prop.val = (void*) buf;
+    prop.len = sizeof(buf);
+
     btif_dm_get_adapter_property(&prop); // FIXME linker error
 }
 
