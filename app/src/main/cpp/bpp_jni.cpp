@@ -1,7 +1,6 @@
 #include <cstring>
 #include <jni.h>
 #include "bpp_jni.h"
-#include "btif.h"
 #include "injector.h"
 #include "ptrace.h"
 #include "utils.h"
@@ -35,8 +34,12 @@ extern "C" {
         }
 
         DEV_CLASS buf;
+        bt_property_t prop;
+        prop.type = BT_PROPERTY_CLASS_OF_DEVICE;
+        prop.val = (void*) buf;
+        prop.len = sizeof(buf);
 
-        call_dlsym(pid, so_handle, "btif_get_device_class"); // TODO add buf as argument
+        call_dlsym(pid, so_handle, "btif_dm_get_adapter_property"); // TODO add prop as argument
 
         call_dlclose(pid, so_handle);
 
@@ -68,11 +71,19 @@ extern "C" {
 
         ALOGD("setBluetoothClassNative - dev_class: 0x%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
 
-        call_dlsym(pid, so_handle, "btif_set_device_class"); // TODO add dev_class as argument
+        long result = call_dlsym(pid, so_handle, "BTM_SetDeviceClass"); // TODO add dev_class as argument
 
         call_dlclose(pid, so_handle);
 
         ptrace_detach(pid);
+
+        if (result != 0) {
+            ALOGE("setBluetoothClassNative - Unable to set dev_class: 0x%2s%2s%2s",
+                  dev_class[0], dev_class[1], dev_class[2]);
+
+            return JNI_FALSE;
+        }
+
         return JNI_TRUE;
     }
 }

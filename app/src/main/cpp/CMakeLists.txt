@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project("BluetoothPlusPlus")
 
-add_library(bpp SHARED bpp_jni.cpp btif.cpp injector.cpp ptrace.cpp utils.cpp)
+add_library(bpp SHARED bpp_jni.cpp injector.cpp ptrace.cpp utils.cpp)
 
 include_directories(include)
 
