@@ -1,5 +1,7 @@
 #include <cstring>
 #include <jni.h>
+#include "btif.h"
+#include "btm.h"
 #include "bpp_jni.h"
 #include "injector.h"
 #include "ptrace.h"
@@ -14,7 +16,6 @@ extern "C" {
 
         if (qti) {
             pid = get_pid();
-            ALOGD("classInitNative - Bluetooth pid: %d", pid);
         }
     }
 
@@ -39,7 +40,7 @@ extern "C" {
         prop.val = (void*) buf;
         prop.len = sizeof(buf);
 
-        call_dlsym(pid, so_handle, "btif_dm_get_adapter_property"); // TODO add prop as argument
+        call_btif_dm_get_adapter_property(pid, so_handle, &prop);
 
         call_dlclose(pid, so_handle);
 
@@ -71,7 +72,7 @@ extern "C" {
 
         ALOGD("setBluetoothClassNative - dev_class: 0x%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
 
-        long result = call_dlsym(pid, so_handle, "BTM_SetDeviceClass"); // TODO add dev_class as argument
+        long result = call_BTM_SetDeviceClass(pid, so_handle, dev_class);
 
         call_dlclose(pid, so_handle);
 
