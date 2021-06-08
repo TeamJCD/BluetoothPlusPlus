@@ -15,6 +15,8 @@ pid_t get_pid() {
 
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
+        ALOGD("get_pid - Processing %s", entry->d_name);
+
         size_t pid = atoi(entry->d_name);
 
         if (pid != 0) {
@@ -22,8 +24,6 @@ pid_t get_pid() {
             char temp_name[50];
 
             snprintf(file_name, 30, "/proc/%zu/cmdline", pid);
-
-            ALOGD("get_pid - Processing %s", file_name);
 
             FILE* fp = fopen(file_name, "r");
             if (fp != nullptr) {
