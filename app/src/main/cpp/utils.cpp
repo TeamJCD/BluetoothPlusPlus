@@ -15,8 +15,6 @@ pid_t get_pid() {
 
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
-        ALOGD("get_pid - Processing %s", entry->d_name);
-
         size_t pid = atoi(entry->d_name);
 
         if (pid != 0) {
@@ -31,7 +29,7 @@ pid_t get_pid() {
                 fclose(fp);
 
                 if (strcmp("com.android.bluetooth", temp_name) == 0) {
-                    ALOGD("get_pid - Bluetooth process found, pid: %d", pid);
+                    ALOGD("get_pid - Bluetooth process found, pid: %zu", pid);
                     return pid;
                 }
             }

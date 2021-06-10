@@ -23,8 +23,10 @@ import androidx.preference.PreferenceGroup;
 import com.github.teamjcd.bpp.db.BluetoothDeviceClassData;
 import com.github.teamjcd.bpp.db.BluetoothDeviceClassStore;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static android.app.Activity.RESULT_OK;
 import static com.github.teamjcd.bpp.BluetoothDeviceClassEditor.URI_EXTRA;
@@ -75,11 +77,6 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     fillList();
                 }
             });
-
-    static {
-        System.loadLibrary("bpp");
-        classInitNative();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,31 +154,39 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 + ", newValue - " + newValue + ", newValue type - "
                 + newValue.getClass());
 
-        if (newValue instanceof String) {
-            BluetoothDeviceClassData newDeviceClass = mStore.get(Integer.parseInt((String) newValue));
-            if (newDeviceClass != null) {
-                BluetoothClass bluetoothClass = new BluetoothClass(newDeviceClass.getDeviceClass());
-                if (setBluetoothClassNative(bluetoothClass.getClassOfDeviceBytes())) {
-                    return mAdapter.setBluetoothClass(bluetoothClass);
+        try {
+            if (newValue instanceof String) {
+                BluetoothDeviceClassData newDeviceClass = mStore.get(Integer.parseInt((String) newValue));
+                if (newDeviceClass != null) {
+                    BluetoothClass bluetoothClass = new BluetoothClass(newDeviceClass.getDeviceClass());
+                    if (BluetoothDeviceClassUtils.setBluetoothClassNative(bluetoothClass.getClassOfDevice())) {
+                        return mAdapter.setBluetoothClass(bluetoothClass);
+                    }
                 }
             }
+        } catch (InterruptedException | IOException e) {
+            Log.e(TAG, "onPreferenceChange(): Exception occurred", e);
         }
 
         return false;
     }
 
     private void saveInitialValue() {
-        BluetoothDeviceClassData defaultClass = mStore.getDefault();
-        Log.d(TAG, "saveInitialValue(): defaultClass - " + defaultClass);
-        if (defaultClass == null) {
-            BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
-            Log.d(TAG, "saveInitialValue(): bluetoothClass - " + bluetoothClass);
-            mStore.saveDefault(new BluetoothDeviceClassData(
-                    "Default",
-                    Optional.ofNullable(bluetoothClass)
-                            .map(BluetoothClass::getClassOfDevice)
-                            .orElse(getBluetoothClassNative())
-            ));
+        try {
+            BluetoothDeviceClassData defaultClass = mStore.getDefault();
+            Log.d(TAG, "saveInitialValue(): defaultClass - " + defaultClass);
+            if (defaultClass == null) {
+                BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+                Log.d(TAG, "saveInitialValue(): bluetoothClass - " + bluetoothClass);
+                mStore.saveDefault(new BluetoothDeviceClassData(
+                        "Default",
+                        Optional.ofNullable(bluetoothClass)
+                                .map(BluetoothClass::getClassOfDevice)
+                                .orElse(BluetoothDeviceClassUtils.getBluetoothClassNative())
+                ));
+            }
+        } catch (InterruptedException | IOException e) {
+            Log.e(TAG, "saveInitialValue(): Exception occurred", e);
         }
     }
 
@@ -193,34 +198,42 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
             final PreferenceGroup codPrefList = findPreference("bluetooth_device_class_list");
 
             if (codPrefList != null) {
-                codPrefList.removeAll();
+                try {
+                    codPrefList.removeAll();
 
-                BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+                    BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
 
-                for (BluetoothDeviceClassData codData : codDataList) {
-                    final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
+                    for (BluetoothDeviceClassData codData : codDataList) {
+                        final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
 
-                    pref.setKey(Integer.toString(codData.getId()));
-                    pref.setTitle(codData.getName());
-                    pref.setPersistent(false);
-                    pref.setSelectable(mAdapter.isEnabled());
-                    pref.setOnPreferenceChangeListener(this);
-                    pref.setIconSpaceReserved(false);
+                        pref.setKey(Integer.toString(codData.getId()));
+                        pref.setTitle(codData.getName());
+                        pref.setPersistent(false);
+                        pref.setSelectable(mAdapter.isEnabled());
+                        pref.setOnPreferenceChangeListener(this);
+                        pref.setIconSpaceReserved(false);
 
-                    pref.setSummary(BluetoothDeviceClassUtils.format(codData.getDeviceClass()));
+                        pref.setSummary(BluetoothDeviceClassUtils.format(codData.getDeviceClass()));
 
-                    Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
-                            + " deviceClass - " + Optional.ofNullable(bluetoothClass)
-                            .map(BluetoothClass::getClassOfDevice)
-                            .orElse(null));
+                        Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
+                                + " deviceClass - " + Optional.ofNullable(bluetoothClass)
+                                .map(BluetoothClass::getClassOfDevice)
+                                .orElse(null));
 
-                    if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
-                        pref.setChecked();
-                    } else if (bluetoothClass == null && codData.getDeviceClass() == getBluetoothClassNative()) {
-                        pref.setChecked();
+                        if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
+                            pref.setChecked();
+                        } else if (bluetoothClass == null && codData.getDeviceClass() == BluetoothDeviceClassUtils.getBluetoothClassNative()) {
+                            pref.setChecked();
+                        }
+
+                        codPrefList.addPreference(pref);
                     }
+                } catch (InterruptedException | IOException e) {
+                    Log.e(TAG, "fillList(): Exception occurred", e);
 
-                    codPrefList.addPreference(pref);
+                    IntStream.range(0, codPrefList.getPreferenceCount())
+                            .mapToObj(codPrefList::getPreference)
+                            .forEach(pref -> pref.setSelectable(false));
                 }
             }
         }
@@ -232,10 +245,4 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
         intent.putExtra(URI_EXTRA, DEVICE_CLASS_URI);
         startActivity(intent);
     }
-
-    private native static void classInitNative();
-
-    private native int getBluetoothClassNative();
-
-    private native boolean setBluetoothClassNative(byte[] value);
 }
