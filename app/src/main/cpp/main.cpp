@@ -47,9 +47,12 @@ int main(int argc, char const* argv[]) {
 
         result = call_btif_dm_get_adapter_property(pid, so_handle, &prop);
 
-        ALOGD("Retrieved Device Class: 0x%2hhu%2hhu%2hhu", buf[0], buf[1], buf[2]);
+        DEV_CLASS* dev_class = nullptr;
+        memcpy(dev_class, prop.val, DEV_CLASS_LEN); // FIXME segfault - memory violation
 
-        printf("%s", buf);
+        ALOGD("Retrieved Device Class: 0x%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
+
+        printf("%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
     } else if (strcmp(argv[1], "set") == 0) {
         DEV_CLASS* dev_class = nullptr;
         memcpy(dev_class, argv[2], DEV_CLASS_LEN);
