@@ -11,18 +11,25 @@ long call_btif_dm_get_adapter_property(pid_t pid, long so_handle, bt_property_t*
     long function_addr = get_remote_function_addr(pid, get_linker_path(), ((long) (void*) dlsym));
     ALOGD("call_dlsym - function_addr: %lx, pid: %d, so_handle: %lx, symbol: %s", function_addr, pid, so_handle, symbol);
 
-    long mmap_ret = call_mmap(pid, 0x400);
+    long mmap_ret_symbol = call_mmap(pid, 0x400);
+    long mmap_ret_prop = call_mmap(pid, 0x400);
 
-    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) symbol, strlen(symbol) + 1);
-    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) prop, sizeof(bt_property_t));
+    ptrace_write(pid, (uint8_t*) mmap_ret_symbol, (uint8_t*) symbol, strlen(symbol) + 1);
+    ptrace_write(pid, (uint8_t*) mmap_ret_prop, (uint8_t*) prop, sizeof(bt_property_t));
 
     long params[2];
     params[0] = so_handle;
-    params[1] = mmap_ret;
+    params[1] = mmap_ret_symbol;
+    params[2] = mmap_ret_prop;
 
-    long ret = call_remote_function(pid, function_addr, params, 2);
+    long ret = call_remote_function(pid, function_addr, params, 3);
 
-    call_munmap(pid, mmap_ret, 0x400);
+    // TODO read prop from remote process
+    // bt_property_t remote_property = ptrace_read(pid, ...);
+    // prop->val = remote_property.val;
+
+    call_munmap(pid, mmap_ret_symbol, 0x400);
+    call_munmap(pid, mmap_ret_prop, 0x400);
 
     return ret;
 }
