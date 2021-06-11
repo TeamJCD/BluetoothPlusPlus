@@ -17,16 +17,14 @@ long call_btif_dm_get_adapter_property(pid_t pid, long so_handle, bt_property_t*
     ptrace_write(pid, (uint8_t*) mmap_ret_symbol, (uint8_t*) symbol, strlen(symbol) + 1);
     ptrace_write(pid, (uint8_t*) mmap_ret_prop, (uint8_t*) prop, sizeof(bt_property_t));
 
-    long params[2];
+    long params[3];
     params[0] = so_handle;
     params[1] = mmap_ret_symbol;
     params[2] = mmap_ret_prop;
 
     long ret = call_remote_function(pid, function_addr, params, 3);
 
-    // TODO read prop from remote process
-    // bt_property_t remote_property = ptrace_read(pid, ...);
-    // prop->val = remote_property.val;
+    ptrace_read(pid, (uint8_t*) &prop, (uint8_t*) mmap_ret_prop, sizeof(bt_property_t) / sizeof(long));
 
     call_munmap(pid, mmap_ret_symbol, 0x400);
     call_munmap(pid, mmap_ret_prop, 0x400);
