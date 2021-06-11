@@ -24,7 +24,7 @@ long call_btif_dm_get_adapter_property(pid_t pid, long so_handle, bt_property_t*
 
     long ret = call_remote_function(pid, function_addr, params, 3);
 
-    ptrace_read(pid, (uint8_t*) &prop, (uint8_t*) mmap_ret_prop, sizeof(bt_property_t) / sizeof(long));
+    ptrace_read(pid, (long*) &prop, (uint8_t*) mmap_ret_prop, sizeof(bt_property_t) / sizeof(long));
 
     call_munmap(pid, mmap_ret_symbol, 0x400);
     call_munmap(pid, mmap_ret_prop, 0x400);

@@ -81,7 +81,7 @@ void ptrace_write(pid_t pid, uint8_t* addr, uint8_t* data, size_t size) {
     ALOGD("write %zu bytes to %p process %d", size, (void*) addr, pid);
 }
 
-void ptrace_read(pid_t pid, uint8_t* dest, uint8_t* addr, size_t size) {
+void ptrace_read(pid_t pid, long* dest, uint8_t* addr, size_t size) {
     for (int i = 0; i < size; ++i) {
         dest[i] = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
     }
