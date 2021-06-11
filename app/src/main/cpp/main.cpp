@@ -57,8 +57,6 @@ int main(int argc, char const* argv[]) {
         ALOGD("Setting Device Class: 0x%2s%2s%2s", dev_class[0], dev_class[1], dev_class[2]);
 
         result = call_BTM_SetDeviceClass(pid, so_handle, dev_class);
-
-        free(dev_class);
     }
 
     call_dlclose(pid, so_handle);

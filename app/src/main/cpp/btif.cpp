@@ -14,7 +14,7 @@ long call_btif_dm_get_adapter_property(pid_t pid, long so_handle, bt_property_t*
     long mmap_ret = call_mmap(pid, 0x400);
 
     ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) symbol, strlen(symbol) + 1);
-    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) prop, prop->len);
+    ptrace_write(pid, (uint8_t*) mmap_ret, (uint8_t*) prop, sizeof(bt_property_t));
 
     long params[2];
     params[0] = so_handle;

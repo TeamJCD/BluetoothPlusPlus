@@ -4,7 +4,6 @@
 #include <sys/types.h>
 #include <dlfcn.h>
 #include <cstring>
-#include "bpp_jni.h"
 #include "injector.h"
 #include "ptrace.h"
 #include "utils.h"
