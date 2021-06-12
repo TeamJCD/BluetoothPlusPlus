@@ -18,7 +18,7 @@ public final class BluetoothDeviceClassUtils {
     }
 
     public static int getBluetoothClassNative() throws InterruptedException, IOException {
-        Process process = Runtime.getRuntime().exec("su -c ./bpp get");
+        Process process = Runtime.getRuntime().exec("su -c ./bin/bpp get");
         process.waitFor();
 
         String result = new BufferedReader(new InputStreamReader(process.getInputStream()))
@@ -29,7 +29,7 @@ public final class BluetoothDeviceClassUtils {
 
     public static boolean setBluetoothClassNative(int bluetoothClass) throws InterruptedException,
             IOException {
-        Process process = Runtime.getRuntime().exec("su -c ./bpp set " + bluetoothClass);
+        Process process = Runtime.getRuntime().exec("su -c ./bin/bpp set " + bluetoothClass);
         process.waitFor();
 
         return process.exitValue() == 0;
