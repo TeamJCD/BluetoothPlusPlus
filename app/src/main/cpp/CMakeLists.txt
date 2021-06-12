@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.10.2)
 project(BluetoothPlusPlus)
 
 add_executable(bpp
-        btif.cpp
         btm.cpp
         injector.cpp
         main.cpp

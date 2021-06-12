@@ -2,7 +2,6 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
-#include "btif.h"
 #include "btm.h"
 #include "injector.h"
 #include "ptrace.h"
@@ -39,17 +38,16 @@ int main(int argc, char const* argv[]) {
     if (strcmp(argv[1], "get") == 0) {
         ALOGD("Getting Device Class");
 
-        DEV_CLASS buf;
-        bt_property_t prop;
-        prop.type = BT_PROPERTY_CLASS_OF_DEVICE;
-        prop.val = (void*) buf;
-        prop.len = sizeof(buf);
+        DEV_CLASS dev_class;
 
-        result = call_btif_dm_get_adapter_property(pid, so_handle, &prop);
+        result = call_BTM_ReadDeviceClass(pid, so_handle, dev_class);
 
-        ALOGD("Retrieved Device Class: 0x%02x%02x%02x", buf[0], buf[1], buf[2]);
+        if (result == 0) {
+            ALOGD("Retrieved Device Class: 0x%02x%02x%02x", dev_class[0], dev_class[1],
+                  dev_class[2]);
 
-        printf("0x%02x%02x%02x", buf[0], buf[1], buf[2]);
+            printf("%02x%02x%02x", dev_class[0], dev_class[1], dev_class[2]);
+        }
     } else if (strcmp(argv[1], "set") == 0) {
         DEV_CLASS* dev_class = nullptr;
         memcpy(dev_class, argv[2], DEV_CLASS_LEN);
