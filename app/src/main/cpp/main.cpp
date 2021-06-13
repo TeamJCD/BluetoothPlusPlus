@@ -40,7 +40,7 @@ int main(int argc, char const* argv[]) {
 
         DEV_CLASS dev_class;
 
-        result = call_BTM_ReadDeviceClass(pid, so_handle, dev_class);
+        result = call_BTM_ReadDeviceClass(pid, so_handle, &dev_class);
 
         if (result == 0) {
             ALOGD("Retrieved Device Class: 0x%02x%02x%02x", dev_class[0], dev_class[1],

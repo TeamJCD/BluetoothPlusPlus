@@ -22,7 +22,7 @@ typedef struct {
     void* val;
 } bt_property_t;
 
-long call_BTM_ReadDeviceClass(pid_t pid, long so_handle, uint8_t* dest);
+long call_BTM_ReadDeviceClass(pid_t pid, long so_handle, DEV_CLASS* dest);
 long call_BTM_SetDeviceClass(pid_t pid, long so_handle, DEV_CLASS* dev_class);
 
 #endif //BLUETOOTH_BTM_H
