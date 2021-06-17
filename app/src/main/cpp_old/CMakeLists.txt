@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project(BluetoothPlusPlus)
 
-add_executable(bpp main.cpp Ptrace.cpp Utils.cpp)
+add_executable(bpp
+        btm.cpp
+        injector.cpp
+        main.cpp
+        ptrace.cpp
+        utils.cpp)
 
 include_directories(include)
 
