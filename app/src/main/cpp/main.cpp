@@ -308,12 +308,15 @@ int main(int argc, char const* argv[]) {
         return -1;
     }
 
-    long mmap_ret = call_mmap(pid, 0x400);
-    call_remote_function_from_namespace(pid, remoteFunctionAddress, mmap_ret, nullptr, 0);
+    printf("remoteFunctionAddress: %ld", remoteFunctionAddress);
+
+    //long mmap_ret = call_mmap(pid, 0x400);
+    long dev_class_addr = call_remote_function_from_namespace(pid, remoteFunctionAddress, /*mmap_ret*/0, nullptr, 0);
     long dev_class;
-    ptrace_read(pid, &dev_class, (uint8_t*) mmap_ret, DEV_CLASS_LEN);
+    ptrace_read(pid, &dev_class, (uint8_t*) dev_class_addr, DEV_CLASS_LEN);
+    //ptrace_read(pid, &dev_class, (uint8_t*) mmap_ret, DEV_CLASS_LEN);
     printf("dev_class: %ld", dev_class);
-    call_munmap(pid, mmap_ret, 0x400);
+    //call_munmap(pid, mmap_ret, 0x400);
 
     close(fd);
     // TODO END
