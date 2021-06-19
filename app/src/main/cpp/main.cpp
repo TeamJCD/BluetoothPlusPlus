@@ -257,6 +257,7 @@ int main(int argc, char const* argv[]) {
     }
 
     long baseAddress = Utils::getModuleBaseAddress(pid, "/system/lib/libbluetooth.so");
+    ALOGD("baseAddress: %ld", baseAddress);
 
     if (Ptrace::attach(pid) != 0) {
         printf("Unable to attach to process %d", pid);
@@ -272,24 +273,51 @@ int main(int argc, char const* argv[]) {
         printf("Unable to open memory from process %d", pid);
     }
 
-    char memoryBuffer[64];
-    if (!pread(fd, memoryBuffer, 4, baseAddress)) {
+    long scanSize = 4148176;
+    /*
+    struct stat buf;
+    int rc = fstat(fd, &buf);
+    if (rc != 0) {
+        printf("Unable to read mem stat, errno: %d", rc);
+        return -1;
+    }
+    scanSize = buf.st_size;
+    */
+    ALOGD("scanSize: %ld", scanSize);
+
+    char* memory = (char*) malloc(sizeof(char) * scanSize);
+    if (!pread(fd, memory, scanSize, baseAddress)) {
         printf("Unable to read memory from process %d", pid);
     }
-
-    struct stat buf;
-    stat("/system/lib/libbluetooth.so", &buf);
-
-    char* memory = (char*) malloc(sizeof(char) * buf.st_size);
-    pread(fd, memory, buf.st_size, baseAddress);
 
     bool foundFlag = false;
     long remoteFunctionAddress = -1;
 
+    /*
+     * 06-19 13:44:11.527  5848  5848 D bpp     : Utils::getProcessId - Process found: com.android.bluetooth (pid: 5056)
+     * 06-19 13:44:11.529  5848  5848 D bpp     : baseAddress: -2140639232
+     * 06-19 13:44:11.530  5848  5848 D bpp     : Ptrace::attach - Attached to process 5056
+     * 06-19 13:44:11.530  5848  5848 D bpp     : scanSize: 4148176
+     * 06-19 13:44:11.530  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.283  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:12.283  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.566  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.566  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.567  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.567  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.569  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * 06-19 13:44:13.569  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
+     * ...
+     */
     const char signature[] = "\x48\x41\xf2\x38\x51\x78\x44\x00\x68\x08\x44\x70\x47\x00\xbf\x7a\xa7\x1d\x00\x80\xb5\x3b\xf7\x0b\xfe\xc1";
-    for (long i = 0; i < buf.st_size; ++i) {
-        for (int j = 0; j < (unsigned long int) strlen(signature); ++j) {
+    for (long i = 0; i < scanSize; ++i) {
+        for (int j = 0; j < (long unsigned int) strlen(signature); ++j) {
             foundFlag = signature[j] == memory[i + j] || signature[j] == '?';
+            ALOGD("foundFlag: 0x%02x|%c == 0x%02x|%c || 0x%02x|%c == ?", signature[j], signature[j], memory[i + j], memory[i + j], signature[j], signature[j]);
 
             if (!foundFlag) {
                 break;
@@ -303,19 +331,19 @@ int main(int argc, char const* argv[]) {
 
     free(memory);
 
-    if (!remoteFunctionAddress) {
-        printf("Unable to find signature %s", signature);
+    if (remoteFunctionAddress == -1) {
+        printf("Unable to find signature");
         return -1;
     }
 
-    printf("remoteFunctionAddress: %ld", remoteFunctionAddress);
+    ALOGD("remoteFunctionAddress: 0x%lx", remoteFunctionAddress);
 
     //long mmap_ret = call_mmap(pid, 0x400);
     long dev_class_addr = call_remote_function_from_namespace(pid, remoteFunctionAddress, /*mmap_ret*/0, nullptr, 0);
-    long dev_class;
-    ptrace_read(pid, &dev_class, (uint8_t*) dev_class_addr, DEV_CLASS_LEN);
+    DEV_CLASS dev_class;
+    ptrace_read(pid, (long*) &dev_class, (uint8_t*) dev_class_addr, DEV_CLASS_LEN);
     //ptrace_read(pid, &dev_class, (uint8_t*) mmap_ret, DEV_CLASS_LEN);
-    printf("dev_class: %ld", dev_class);
+    ALOGD("dev_class: %s", dev_class);
     //call_munmap(pid, mmap_ret, 0x400);
 
     close(fd);
