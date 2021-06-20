@@ -75,13 +75,13 @@ long Utils::getRemoteBaseAddress(pid_t pid, const char *moduleName) {
     return baseAddressLong;
 }
 
-int Utils::readRemoteMemory(pid_t pid, long remoteBaseAddress, char *buf, size_t bufferLength) {
+int Utils::readRemoteMemory(pid_t pid, long remoteBaseAddress, void* buf, size_t bufferLength) {
     if (pid == -1) {
         return -1;
     }
 
     struct iovec local[1];
-    local[0].iov_base = calloc(bufferLength, sizeof(char));
+    local[0].iov_base = buf;
     local[0].iov_len = bufferLength;
 
     struct iovec remote[1];
@@ -113,6 +113,5 @@ int Utils::readRemoteMemory(pid_t pid, long remoteBaseAddress, char *buf, size_t
         return -1;
     }
 
-    buf = (char*) local[0].iov_base;
     return 0;
 }

@@ -293,7 +293,7 @@ int main(int argc, char const* argv[]) {
         printf("Unable to read memory from process %d", pid);
     }
     */
-    char memory[scanSize];
+    char* memory = (char*) malloc(sizeof(char) * scanSize);
     if (Utils::readRemoteMemory(pid, remoteBaseAddress, memory, scanSize) == -1) {
         printf("Unable to read memory of process %d", pid);
         return -1;
@@ -306,7 +306,6 @@ int main(int argc, char const* argv[]) {
     for (long i = 0; i < scanSize; ++i) {
         for (int j = 0; j < (long unsigned int) strlen(signature); ++j) {
             foundFlag = signature[j] == memory[i + j] || signature[j] == '?';
-            ALOGD("foundFlag: 0x%02x|%c == 0x%02x|%c || 0x%02x|%c == ?", signature[j], signature[j], memory[i + j], memory[i + j], signature[j], signature[j]);
 
             if (!foundFlag) {
                 break;

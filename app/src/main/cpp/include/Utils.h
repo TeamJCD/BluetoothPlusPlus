@@ -12,7 +12,7 @@ class Utils {
 public:
     static pid_t getProcessId(const char* procName);
     static long getRemoteBaseAddress(pid_t pid, const char* moduleName);
-    static int readRemoteMemory(pid_t pid, long remoteBaseAddress, char* buf, size_t bufferLength);
+    static int readRemoteMemory(pid_t pid, long remoteBaseAddress, void* buf, size_t bufferLength);
 };
 
 #endif //BLUETOOTH_UTILS_H
