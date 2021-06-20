@@ -329,9 +329,10 @@ int main(int argc, char const* argv[]) {
     //long mmap_ret = call_mmap(pid, 0x400);
     long dev_class_addr = call_remote_function_from_namespace(pid, remoteFunctionAddress, /*mmap_ret*/0, nullptr, 0);
     DEV_CLASS dev_class;
-    ptrace_read(pid, (long*) &dev_class, (uint8_t*) dev_class_addr, DEV_CLASS_LEN);
+    Utils::readRemoteMemory(pid, dev_class_addr, dev_class, DEV_CLASS_LEN);
+    //ptrace_read(pid, (long*) &dev_class, (uint8_t*) dev_class_addr, DEV_CLASS_LEN);
     //ptrace_read(pid, &dev_class, (uint8_t*) mmap_ret, DEV_CLASS_LEN);
-    ALOGD("dev_class: %s", dev_class);
+    ALOGD("dev_class: 0x%02x%02x%02x", dev_class[0], dev_class[1], dev_class[2]);
     //call_munmap(pid, mmap_ret, 0x400);
 
     //close(fd);
