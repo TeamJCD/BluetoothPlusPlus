@@ -256,8 +256,8 @@ int main(int argc, char const* argv[]) {
         return -1;
     }
 
-    long baseAddress = Utils::getModuleBaseAddress(pid, "/system/lib/libbluetooth.so");
-    ALOGD("baseAddress: %ld", baseAddress);
+    long remoteBaseAddress = Utils::getRemoteBaseAddress(pid, "/system/lib/libbluetooth.so");
+    ALOGD("baseAddress: %ld", remoteBaseAddress);
 
     if (Ptrace::attach(pid) != 0) {
         printf("Unable to attach to process %d", pid);
@@ -265,6 +265,7 @@ int main(int argc, char const* argv[]) {
     }
 
     // TODO BEGIN: code cleanup, move into classes
+    /*
     char virtualMemory[64];
     sprintf(virtualMemory, "/proc/%d/mem", pid);
 
@@ -272,6 +273,7 @@ int main(int argc, char const* argv[]) {
     if (!fd) {
         printf("Unable to open memory from process %d", pid);
     }
+    */
 
     long scanSize = 4148176;
     /*
@@ -285,34 +287,21 @@ int main(int argc, char const* argv[]) {
     */
     ALOGD("scanSize: %ld", scanSize);
 
+    /*
     char* memory = (char*) malloc(sizeof(char) * scanSize);
-    if (!pread(fd, memory, scanSize, baseAddress)) {
+    if (!pread(fd, memory, scanSize, remoteBaseAddress)) {
         printf("Unable to read memory from process %d", pid);
+    }
+    */
+    char memory[scanSize];
+    if (Utils::readRemoteMemory(pid, remoteBaseAddress, memory, scanSize) == -1) {
+        printf("Unable to read memory of process %d", pid);
+        return -1;
     }
 
     bool foundFlag = false;
     long remoteFunctionAddress = -1;
 
-    /*
-     * 06-19 13:44:11.527  5848  5848 D bpp     : Utils::getProcessId - Process found: com.android.bluetooth (pid: 5056)
-     * 06-19 13:44:11.529  5848  5848 D bpp     : baseAddress: -2140639232
-     * 06-19 13:44:11.530  5848  5848 D bpp     : Ptrace::attach - Attached to process 5056
-     * 06-19 13:44:11.530  5848  5848 D bpp     : scanSize: 4148176
-     * 06-19 13:44:11.530  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.282  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.283  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:12.283  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.566  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.566  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.567  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.567  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.569  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * 06-19 13:44:13.569  5848  5848 D bpp     : foundFlag: 0x48|H == 0x00|
-     * ...
-     */
     const char signature[] = "\x48\x41\xf2\x38\x51\x78\x44\x00\x68\x08\x44\x70\x47\x00\xbf\x7a\xa7\x1d\x00\x80\xb5\x3b\xf7\x0b\xfe\xc1";
     for (long i = 0; i < scanSize; ++i) {
         for (int j = 0; j < (long unsigned int) strlen(signature); ++j) {
@@ -325,7 +314,7 @@ int main(int argc, char const* argv[]) {
         }
 
         if (foundFlag) {
-            remoteFunctionAddress = baseAddress + i;
+            remoteFunctionAddress = remoteBaseAddress + i;
         }
     }
 
@@ -346,7 +335,7 @@ int main(int argc, char const* argv[]) {
     ALOGD("dev_class: %s", dev_class);
     //call_munmap(pid, mmap_ret, 0x400);
 
-    close(fd);
+    //close(fd);
     // TODO END
 
     if (Ptrace::detach(pid) != 0) {
