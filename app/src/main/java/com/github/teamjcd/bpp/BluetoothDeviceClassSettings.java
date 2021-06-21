@@ -159,7 +159,10 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 BluetoothDeviceClassData newDeviceClass = mStore.get(Integer.parseInt((String) newValue));
                 if (newDeviceClass != null) {
                     BluetoothClass bluetoothClass = new BluetoothClass(newDeviceClass.getDeviceClass());
-                    if (BluetoothDeviceClassUtils.setBluetoothClassNative(bluetoothClass.getClassOfDevice())) {
+                    if (mAdapter.getBluetoothClass() == null) {
+                        BluetoothDeviceClassUtils.setBluetoothClassNative(bluetoothClass.getClassOfDevice());
+                        return true;
+                    } else {
                         return mAdapter.setBluetoothClass(bluetoothClass);
                     }
                 }

@@ -10,9 +10,9 @@ install_binary() {
         abort
     fi
 
-    mkdir -p $MODPATH/system/priv-app/BluetoothPlusPlus/bin
-    cp $MODPATH/common/$ARCH_DIR/bpp $MODPATH/system/priv-app/BluetoothPlusPlus/bin
-    set_perm $MODPATH/system/priv-app/BluetoothPlusPlus/bin/bpp root root 750
+    mkdir -p "$MODPATH/system/priv-app/BluetoothPlusPlus/bin"
+    cp "$MODPATH/common/$ARCH_DIR/bpp_qti" "$MODPATH/system/priv-app/BluetoothPlusPlus/bin"
+    set_perm "$MODPATH/system/priv-app/BluetoothPlusPlus/bin/bpp_qti" root root 750
 }
 
 install_binary
