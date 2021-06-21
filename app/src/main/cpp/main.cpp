@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <exception>
+#include <string>
 #include "BluetoothPlusPlus.h"
 
 using namespace std;
@@ -26,8 +27,14 @@ int main(int argc, char const* argv[]) {
 
             return ret;
         } else if (strcmp(argv[1], "set") == 0) {
+            int src = stoi(argv[2], nullptr, 16);
+
             dev_class_t deviceClass;
-            memcpy(deviceClass, argv[2], DEV_CLASS_LEN);
+            memcpy(deviceClass, &src, DEV_CLASS_LEN);
+
+            int n = sizeof(deviceClass) / sizeof(deviceClass[0]);
+            reverse(deviceClass, deviceClass + n);
+
             return bpp.setDeviceClass(deviceClass);
         }
     } catch(const exception &e) {

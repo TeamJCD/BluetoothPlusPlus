@@ -66,11 +66,14 @@ int BluetoothPlusPlus::setDeviceClass(void *deviceClass) {
     long params[1];
     params[0] = mmapAddress;
 
-    int result;
-    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
-    utils::readRemoteMemory(pid, returnAddress, &result, sizeof(int));
+    int result = (int) injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
 
     injector::callMunmap(pid, mmapAddress, 0x400);
+
+    if (result != 0) {
+        printf("Unable to set device class, error code: %d", result);
+        return result;
+    }
 
     return result;
 }

@@ -201,7 +201,8 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                 try {
                     codPrefList.removeAll();
 
-                    BluetoothClass bluetoothClass = mAdapter.getBluetoothClass();
+                    BluetoothClass bluetoothClass = Optional.ofNullable(mAdapter.getBluetoothClass())
+                            .orElse(new BluetoothClass(BluetoothDeviceClassUtils.getBluetoothClassNative()));
 
                     for (BluetoothDeviceClassData codData : codDataList) {
                         final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
@@ -216,13 +217,9 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                         pref.setSummary(BluetoothDeviceClassUtils.format(codData.getDeviceClass()));
 
                         Log.d(TAG, "fillList(): codData.getDeviceClass - " + codData.getDeviceClass()
-                                + " deviceClass - " + Optional.ofNullable(bluetoothClass)
-                                .map(BluetoothClass::getClassOfDevice)
-                                .orElse(null));
+                                + " deviceClass - " + bluetoothClass.getClassOfDevice());
 
-                        if (bluetoothClass != null && codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
-                            pref.setChecked();
-                        } else if (bluetoothClass == null && codData.getDeviceClass() == BluetoothDeviceClassUtils.getBluetoothClassNative()) {
+                        if (codData.getDeviceClass() == bluetoothClass.getClassOfDevice()) {
                             pref.setChecked();
                         }
 

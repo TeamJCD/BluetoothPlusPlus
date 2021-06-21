@@ -24,6 +24,10 @@ public final class BluetoothDeviceClassUtils {
         String result = new BufferedReader(new InputStreamReader(process.getInputStream()))
                 .readLine();
 
+        if (process.exitValue() != 0) {
+            throw new IOException(result);
+        }
+
         return parse(result);
     }
 
@@ -32,6 +36,13 @@ public final class BluetoothDeviceClassUtils {
         Process process = Runtime.getRuntime().exec("su -c ./bin/bpp set " + bluetoothClass);
         process.waitFor();
 
-        return process.exitValue() == 0;
+        if (process.exitValue() != 0) {
+            String result = new BufferedReader(new InputStreamReader(process.getInputStream()))
+                    .readLine();
+
+            throw new IOException(result);
+        }
+
+        return true;
     }
 }
