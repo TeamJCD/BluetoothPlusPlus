@@ -28,7 +28,6 @@ BluetoothPlusPlus::BluetoothPlusPlus() {
     }
 
     scanSize = buf.st_size;
-    ALOGD("scanSize: %ld, buf.st_size: %ld", scanSize, buf.st_size); // FIXME remove
     memory = (char*) malloc(sizeof(char) * scanSize);
     if (utils::readRemoteMemory(pid, remoteBaseAddress, memory, scanSize) != 0) {
         throw runtime_error("Unable to read remote memory");
