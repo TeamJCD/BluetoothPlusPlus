@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project(BluetoothPlusPlus)
 
-add_executable(bpp BluetoothPlusPlus.cpp injector.cpp main.cpp utils.cpp)
+add_executable(bpp_qti BluetoothPlusPlus.cpp injector.cpp main.cpp utils.cpp)
 
 include_directories(include)
 
