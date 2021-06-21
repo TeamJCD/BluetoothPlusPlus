@@ -14,7 +14,7 @@ import java.io.File;
 import static android.provider.BaseColumns._ID;
 
 public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = BluetoothDeviceClassDatabaseHelper.class.getName();
+    private static final String TAG = BluetoothDeviceClassDatabaseHelper.class.getSimpleName();
 
     public static final String DATABASE_NAME = "Bluetooth";
     public static final String TABLE_NAME = "DeviceClass";

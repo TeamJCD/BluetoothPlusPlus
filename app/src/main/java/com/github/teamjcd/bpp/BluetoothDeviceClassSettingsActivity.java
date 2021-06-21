@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 
 public class BluetoothDeviceClassSettingsActivity extends BluetoothDeviceClassActivity {
-    private static final String TAG = BluetoothDeviceClassSettingsActivity.class.getName();
+    private static final String TAG = BluetoothDeviceClassSettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedState) {

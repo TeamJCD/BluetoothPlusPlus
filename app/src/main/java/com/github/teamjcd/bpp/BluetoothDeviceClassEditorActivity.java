@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 public class BluetoothDeviceClassEditorActivity extends BluetoothDeviceClassActivity {
-    private static final String TAG = BluetoothDeviceClassEditorActivity.class.getName();
+    private static final String TAG = BluetoothDeviceClassEditorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedState) {

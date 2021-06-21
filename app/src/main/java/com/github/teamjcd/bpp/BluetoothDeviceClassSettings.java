@@ -40,7 +40,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT =
             "com.github.teamjcd.bpp.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
 
-    private static final String TAG = BluetoothDeviceClassSettings.class.getName();
+    private static final String TAG = BluetoothDeviceClassSettings.class.getSimpleName();
 
     private static final int MENU_NEW = Menu.FIRST;
 
