@@ -4,7 +4,7 @@
 #include <android/log.h>
 #include <sys/types.h>
 
-#define LOG_TAG "bpp"
+#define LOG_TAG "bpp_qti"
 #define ALOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define ALOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 

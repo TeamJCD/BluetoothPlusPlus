@@ -31,9 +31,10 @@ public final class BluetoothDeviceClassUtils {
         return parse(result);
     }
 
-    public static void setBluetoothClassNative(int bluetoothClass) throws InterruptedException,
+    public static void setBluetoothClassNative(int deviceClass) throws InterruptedException,
             IOException {
-        Process process = Runtime.getRuntime().exec("su -c ./bin/bpp_qti set " + bluetoothClass);
+        Process process = Runtime.getRuntime().exec("su -c ./bin/bpp_qti set "
+                + format(deviceClass));
         process.waitFor();
 
         if (process.exitValue() != 0) {
