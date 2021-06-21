@@ -7,4 +7,4 @@ add_executable(bpp_qti BluetoothPlusPlus.cpp injector.cpp main.cpp utils.cpp)
 include_directories(include)
 
 find_library(log-lib log)
-target_link_libraries(bpp ${log-lib})
+target_link_libraries(bpp_qti ${log-lib})
