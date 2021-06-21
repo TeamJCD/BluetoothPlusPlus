@@ -3,8 +3,31 @@
 #include <cstdlib>
 #include <cstring>
 #include <dirent.h>
+#include <sys/system_properties.h>
 #include <sys/uio.h>
+#include <unistd.h>
+#include "BluetoothPlusPlus.h"
 #include "utils.h"
+
+int getOsVersion() {
+    if (androidOsVersion != -1) {
+        return androidOsVersion;
+    }
+
+    char osVersion[PROP_VALUE_MAX + 1];
+    __system_property_get("ro.build.version.release", osVersion);
+    androidOsVersion = atoi(osVersion);
+
+    return androidOsVersion;
+}
+
+const char* utils::getLibcPath() {
+    if (getOsVersion() >= 10) {
+        return LIBC_PATH_NEW;
+    } else {
+        return LIBC_PATH_OLD;
+    }
+}
 
 pid_t utils::getProcessId(const char *processName) {
     if (processName == NULL) {
@@ -133,4 +156,15 @@ long utils::getRemoteFunctionAddress(long scanSize, char *signature, const char*
     }
 
     return remoteFunctionAddress;
+}
+
+long utils::getRemoteFunctionAddress(pid_t pid, const char* libraryPath, long localFunctionAddress) {
+    long remote_base_addr = getRemoteBaseAddress(pid, libraryPath);
+    long local_base_addr = getRemoteBaseAddress(getpid(), libraryPath);
+
+    if (remote_base_addr == 0 || local_base_addr == 0) {
+        return 0;
+    }
+
+    return localFunctionAddress + (remote_base_addr - local_base_addr);
 }

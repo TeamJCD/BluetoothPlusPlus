@@ -47,7 +47,30 @@ int BluetoothPlusPlus::readDeviceClass(void *deviceClass) {
         return -1;
     }
 
-    long deviceClassAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, nullptr, 0);
-    utils::readRemoteMemory(pid, deviceClassAddress, deviceClass, DEV_CLASS_LEN);
+    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, nullptr, 0);
+    utils::readRemoteMemory(pid, returnAddress, deviceClass, DEV_CLASS_LEN);
     return 0;
+}
+
+int BluetoothPlusPlus::setDeviceClass(void *deviceClass) {
+    long remoteFunctionAddress = utils::getRemoteFunctionAddress(scanSize, SIGNATURE_SET_DEV_CLASS, memory, remoteBaseAddress);
+
+    if (remoteFunctionAddress == -1) {
+        printf("Unable to find signature\n");
+        return -1;
+    }
+
+    long mmapAddress = injector::callMmap(pid, 0x400);
+    injector::write(pid, (uint8_t*) mmapAddress, (uint8_t*) deviceClass, DEV_CLASS_LEN);
+
+    long params[1];
+    params[0] = mmapAddress;
+
+    int result;
+    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
+    utils::readRemoteMemory(pid, returnAddress, &result, sizeof(int));
+
+    injector::callMunmap(pid, mmapAddress, 0x400);
+
+    return result;
 }

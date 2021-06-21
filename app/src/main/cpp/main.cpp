@@ -17,16 +17,18 @@ int main(int argc, char const* argv[]) {
     try {
         BluetoothPlusPlus bpp;
         if (strcmp(argv[1], "get") == 0) {
-            dev_class_t devClass;
+            dev_class_t deviceClass;
 
             int ret;
-            if ((ret = bpp.readDeviceClass(devClass)) == 0) {
-                printf("%02x%02x%02x\n", devClass[0], devClass[1], devClass[2]);
+            if ((ret = bpp.readDeviceClass(deviceClass)) == 0) {
+                printf("%02x%02x%02x\n", deviceClass[0], deviceClass[1], deviceClass[2]);
             }
 
             return ret;
         } else if (strcmp(argv[1], "set") == 0) {
-            // TODO
+            dev_class_t deviceClass;
+            memcpy(deviceClass, argv[2], DEV_CLASS_LEN);
+            return bpp.setDeviceClass(deviceClass);
         }
     } catch(const exception &e) {
         printf("%s\n", e.what());

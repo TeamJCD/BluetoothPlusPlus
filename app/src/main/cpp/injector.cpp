@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <linux/elf.h>
+#include <sys/mman.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 #include "injector.h"
@@ -36,36 +37,6 @@ void restart(pid_t pid) {
     ptrace(PTRACE_CONT, pid, NULL, NULL);
 }
 
-void write(pid_t pid, uint8_t *addr, uint8_t *data, size_t size) {
-    const size_t wordSize = sizeof(long);
-    int mod = size % wordSize;
-    int loopCount = size / wordSize;
-
-    uint8_t* tempAddress = addr;
-    uint8_t* tempData = data;
-
-    for (int i = 0; i < loopCount; ++i) {
-        ptrace(PTRACE_POKEDATA, pid, tempAddress, *((long*) tempData));
-        tempAddress += wordSize;
-        tempData += wordSize;
-    }
-
-    if (mod > 0) {
-        long val = ptrace(PTRACE_PEEKDATA, pid, tempAddress, NULL);
-        auto* p = (uint8_t*) &val;
-
-        for(int i = 0; i < mod; ++i) {
-            *p = *(tempData);
-            ++p;
-            ++tempData;
-        }
-
-        ptrace(PTRACE_POKEDATA, pid, tempAddress, val);
-    }
-
-    ALOGD("injector::write - Wrote %zu bytes to %p process %d", size, (void*) addr, pid);
-}
-
 int injector::attach(pid_t pid) {
     if (pid == -1) {
         return -1;
@@ -94,6 +65,36 @@ int injector::detach(pid_t pid) {
 
     ALOGD("injector::detach - Detached from process %d", pid);
     return 0;
+}
+
+void injector::write(pid_t pid, uint8_t *addr, uint8_t *data, size_t size) {
+    const size_t wordSize = sizeof(long);
+    int mod = size % wordSize;
+    int loopCount = size / wordSize;
+
+    uint8_t* tempAddress = addr;
+    uint8_t* tempData = data;
+
+    for (int i = 0; i < loopCount; ++i) {
+        ptrace(PTRACE_POKEDATA, pid, tempAddress, *((long*) tempData));
+        tempAddress += wordSize;
+        tempData += wordSize;
+    }
+
+    if (mod > 0) {
+        long val = ptrace(PTRACE_PEEKDATA, pid, tempAddress, NULL);
+        auto* p = (uint8_t*) &val;
+
+        for(int i = 0; i < mod; ++i) {
+            *p = *(tempData);
+            ++p;
+            ++tempData;
+        }
+
+        ptrace(PTRACE_POKEDATA, pid, tempAddress, val);
+    }
+
+    ALOGD("injector::write - Wrote %zu bytes to %p process %d", size, (void*) addr, pid);
 }
 
 long injector::callRemoteFunction(pid_t pid, long remoteFunctionAddress, long *args, size_t argc) {
@@ -143,4 +144,26 @@ long injector::callRemoteFunction(pid_t pid, long remoteFunctionAddress, long *a
           remoteFunctionAddress, argc, (long long) registers.ARM_r0);
 
     return registers.ARM_r0;
+}
+
+long injector::callMmap(pid_t pid, size_t length) {
+    long params[6];
+    params[0] = 0;
+    params[1] = length;
+    params[2] = PROT_READ | PROT_WRITE;
+    params[3] = MAP_PRIVATE | MAP_ANONYMOUS;
+    params[4] = 0;
+    params[5] = 0;
+
+    long remoteFunctionAddress = utils::getRemoteFunctionAddress(pid, utils::getLibcPath(), ((long) (void*) mmap));
+    return callRemoteFunction(pid, remoteFunctionAddress, params, 6);
+}
+
+long injector::callMunmap(pid_t pid, long address, size_t length) {
+    long params[2];
+    params[0] = address;
+    params[1] = length;
+
+    long remoteFunctionAddress = utils::getRemoteFunctionAddress(pid, utils::getLibcPath(), ((long) (void*) munmap));
+    return callRemoteFunction(pid, remoteFunctionAddress, params, 2);
 }
