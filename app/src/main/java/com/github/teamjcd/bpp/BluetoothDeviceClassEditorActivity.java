@@ -7,13 +7,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 public class BluetoothDeviceClassEditorActivity extends BluetoothDeviceClassActivity {
-    private static final String LOG_TAG = BluetoothDeviceClassEditorActivity.class.getName();
+    private static final String TAG = BluetoothDeviceClassEditorActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        Log.d(LOG_TAG, "Starting onCreate");
+        Log.d(TAG, "Starting onCreate");
 
         setContentView(R.layout.activity_bluetooth_device_class_editor);
 

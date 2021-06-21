@@ -6,13 +6,13 @@ import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 
 public class BluetoothDeviceClassSettingsActivity extends BluetoothDeviceClassActivity {
-    private static final String LOG_TAG = BluetoothDeviceClassSettingsActivity.class.getName();
+    private static final String TAG = BluetoothDeviceClassSettingsActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        Log.d(LOG_TAG, "Starting onCreate");
+        Log.d(TAG, "Starting onCreate");
 
         setContentView(R.layout.activity_bluetooth_device_class_settings);
 

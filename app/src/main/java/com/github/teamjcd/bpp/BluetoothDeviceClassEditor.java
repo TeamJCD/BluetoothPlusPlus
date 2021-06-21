@@ -33,7 +33,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
     public final static String URI_EXTRA = "BluetoothDeviceClassEditor.URI_EXTRA";
 
-    private final static String TAG = BluetoothDeviceClassEditor.class.getSimpleName();
+    private final static String TAG = BluetoothDeviceClassEditor.class.getName();
 
     private static final int MENU_DELETE = Menu.FIRST;
     private static final int MENU_SAVE = Menu.FIRST + 1;

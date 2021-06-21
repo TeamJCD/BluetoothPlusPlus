@@ -40,7 +40,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
     public static final String ACTION_BLUETOOTH_DEVICE_CLASS_INSERT =
             "com.github.teamjcd.bpp.BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT";
 
-    private static final String TAG = "BluetoothDeviceClassSettings";
+    private static final String TAG = BluetoothDeviceClassSettings.class.getName();
 
     private static final int MENU_NEW = Menu.FIRST;
 
@@ -185,10 +185,16 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                         "Default",
                         Optional.ofNullable(bluetoothClass)
                                 .map(BluetoothClass::getClassOfDevice)
-                                .orElse(BluetoothDeviceClassUtils.getBluetoothClassNative())
+                                .orElseGet(() -> {
+                                    try {
+                                        return BluetoothDeviceClassUtils.getBluetoothClassNative();
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                })
                 ));
             }
-        } catch (InterruptedException | IOException e) {
+        } catch (RuntimeException e) {
             Log.e(TAG, "saveInitialValue(): Exception occurred", e);
         }
     }
@@ -205,7 +211,13 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
                     codPrefList.removeAll();
 
                     BluetoothClass bluetoothClass = Optional.ofNullable(mAdapter.getBluetoothClass())
-                            .orElse(new BluetoothClass(BluetoothDeviceClassUtils.getBluetoothClassNative()));
+                            .orElseGet(() -> {
+                                try {
+                                    return new BluetoothClass(BluetoothDeviceClassUtils.getBluetoothClassNative());
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
 
                     for (BluetoothDeviceClassData codData : codDataList) {
                         final BluetoothDeviceClassPreference pref = new BluetoothDeviceClassPreference(getContext());
@@ -228,7 +240,7 @@ public class BluetoothDeviceClassSettings extends PreferenceFragmentCompat
 
                         codPrefList.addPreference(pref);
                     }
-                } catch (InterruptedException | IOException e) {
+                } catch (RuntimeException e) {
                     Log.e(TAG, "fillList(): Exception occurred", e);
 
                     IntStream.range(0, codPrefList.getPreferenceCount())

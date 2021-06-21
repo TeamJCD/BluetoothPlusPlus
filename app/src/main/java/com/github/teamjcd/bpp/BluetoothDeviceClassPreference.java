@@ -19,7 +19,7 @@ import static com.github.teamjcd.bpp.BluetoothDeviceClassSettings.ACTION_BLUETOO
 import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
 
 public class BluetoothDeviceClassPreference extends Preference implements CompoundButton.OnCheckedChangeListener {
-    private final static String TAG = "BluetoothDeviceClassPreference";
+    private final static String TAG = BluetoothDeviceClassPreference.class.getName();
 
     private static String mSelectedKey = null;
     @SuppressLint("StaticFieldLeak")
