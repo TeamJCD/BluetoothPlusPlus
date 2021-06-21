@@ -11,8 +11,10 @@ install_binary() {
     fi
 
     mkdir -p "$MODPATH/system/priv-app/BluetoothPlusPlus/bin"
-    cp "$MODPATH/common/$ARCH_DIR/bpp_qti" "$MODPATH/system/priv-app/BluetoothPlusPlus/bin"
+    cp "$MODPATH/bin/$ARCH_DIR/bpp_qti" "$MODPATH/system/priv-app/BluetoothPlusPlus/bin"
     set_perm "$MODPATH/system/priv-app/BluetoothPlusPlus/bin/bpp_qti" root root 750
 }
 
-install_binary
+if [[ -f "/system/system_ext/lib/libbluetooth_qti.so" || -f "/system/system_ext/lib64/libbluetooth_qti.so" ]]; then
+    install_binary
+fi
