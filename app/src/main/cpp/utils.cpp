@@ -1,21 +1,19 @@
+#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <dirent.h>
-#include <errno.h>
 #include <sys/uio.h>
-#include <unistd.h>
-#include "Utils.h"
+#include "utils.h"
 
-pid_t Utils::getProcessId(const char *procName) {
-    if (procName == NULL) {
+pid_t utils::getProcessId(const char *processName) {
+    if (processName == NULL) {
         return -1;
     }
 
-    DIR* dir = opendir("/proc");
-
+    DIR *dir = opendir("/proc");
     if (dir == nullptr) {
-        ALOGE("Utils::getProcessId - /proc not found");
+        ALOGE("utils::getProcessId - /proc not found");
         return -1;
     }
 
@@ -34,19 +32,19 @@ pid_t Utils::getProcessId(const char *procName) {
                 fgets(tempName, 50, fp);
                 fclose(fp);
 
-                if (strcmp(procName, tempName) == 0) {
-                    ALOGD("Utils::getProcessId - Process found: %s (pid: %zu)", procName, pid);
+                if (strcmp(processName, tempName) == 0) {
+                    ALOGD("utils::getProcessId - Process found: %s (pid: %zu)", processName, pid);
                     return pid;
                 }
             }
         }
     }
 
-    ALOGE("Utils::getProcessId - Process not found: %s", procName);
+    ALOGE("utils::getProcessId - Process not found: %s", processName);
     return -1;
 }
 
-long Utils::getRemoteBaseAddress(pid_t pid, const char *moduleName) {
+long utils::getRemoteBaseAddress(pid_t pid, const char *libraryPath) {
     if (pid == -1) {
         return 0;
     }
@@ -62,7 +60,7 @@ long Utils::getRemoteBaseAddress(pid_t pid, const char *moduleName) {
     char line[512];
     if (fp != nullptr) {
         while(fgets(line, 512, fp) != nullptr) {
-            if (strstr(line, moduleName) != nullptr) {
+            if (strstr(line, libraryPath) != nullptr) {
                 char* baseAddress = strtok(line, "-");
                 baseAddressLong = strtoul(baseAddress, nullptr, 16);
                 break;
@@ -75,17 +73,17 @@ long Utils::getRemoteBaseAddress(pid_t pid, const char *moduleName) {
     return baseAddressLong;
 }
 
-int Utils::readRemoteMemory(pid_t pid, long remoteBaseAddress, void* buf, size_t bufferLength) {
+int utils::readRemoteMemory(pid_t pid, long address, void *buffer, size_t bufferLength) {
     if (pid == -1) {
         return -1;
     }
 
     struct iovec local[1];
-    local[0].iov_base = buf;
+    local[0].iov_base = buffer;
     local[0].iov_len = bufferLength;
 
     struct iovec remote[1];
-    remote[0].iov_base = (void*) remoteBaseAddress;
+    remote[0].iov_base = (void*) address;
     remote[0].iov_len = bufferLength;
 
     ssize_t result = process_vm_readv(pid, local, 1, remote, 1, 0);
@@ -114,4 +112,25 @@ int Utils::readRemoteMemory(pid_t pid, long remoteBaseAddress, void* buf, size_t
     }
 
     return 0;
+}
+
+long utils::getRemoteFunctionAddress(long scanSize, char *signature, const char* memory, long remoteBaseAddress) {
+    long remoteFunctionAddress = -1;
+    bool foundFlag = false;
+
+    for (long i = 0; i < scanSize; ++i) {
+        for (int j = 0; j < (long unsigned int) strlen(signature); ++j) {
+            foundFlag = signature[j] == memory[i + j] || signature[j] == '?';
+
+            if (!foundFlag) {
+                break;
+            }
+        }
+
+        if (foundFlag) {
+            remoteFunctionAddress = remoteBaseAddress + i;
+        }
+    }
+
+    return remoteFunctionAddress;
 }
