@@ -21,7 +21,7 @@ int main(int argc, char const* argv[]) {
             dev_class_t deviceClass;
 
             int ret;
-            if ((ret = bpp.readDeviceClass(deviceClass)) == 0) {
+            if ((ret = bpp.getDeviceClass(&deviceClass)) == 0) {
                 printf("%02x%02x%02x\n", deviceClass[0], deviceClass[1], deviceClass[2]);
             }
 
@@ -35,7 +35,7 @@ int main(int argc, char const* argv[]) {
             int n = sizeof(deviceClass) / sizeof(deviceClass[0]);
             reverse(deviceClass, deviceClass + n);
 
-            return bpp.setDeviceClass(deviceClass);
+            return bpp.setDeviceClass(&deviceClass);
         }
     } catch(const exception &e) {
         printf("%s\n", e.what());

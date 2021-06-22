@@ -140,7 +140,7 @@ long injector::callRemoteFunction(pid_t pid, long remoteFunctionAddress, long *a
     getRegisters(pid, &registers);
     setRegisters(pid, &backupRegisters);
 
-    ALOGD("Ptrace::callRemoteFunction - Call remote function %lx with %zu arguments, return value is %llx",
+    ALOGD("injector::callRemoteFunction - Call remote function %lx with %zu arguments, return value is %llx",
           remoteFunctionAddress, argc, (long long) registers.ARM_r0);
 
     return registers.ARM_r0;

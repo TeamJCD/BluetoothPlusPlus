@@ -39,7 +39,7 @@ BluetoothPlusPlus::~BluetoothPlusPlus() {
     injector::detach(pid);
 }
 
-int BluetoothPlusPlus::readDeviceClass(void *deviceClass) {
+int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
     long remoteFunctionAddress = utils::getRemoteFunctionAddress(scanSize, SIGNATURE_GET_DEV_CLASS, memory, remoteBaseAddress);
 
     if (remoteFunctionAddress == -1) {
@@ -47,12 +47,33 @@ int BluetoothPlusPlus::readDeviceClass(void *deviceClass) {
         return -1;
     }
 
-    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, nullptr, 0);
-    utils::readRemoteMemory(pid, returnAddress, deviceClass, DEV_CLASS_LEN);
+    long mmapAddressDeviceClass = injector::callMmap(pid, DEV_CLASS_LEN);
+
+    dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
+    long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
+    injector::write(pid, (uint8_t*) mmapAddressDeviceClassProperty, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
+
+    long params[1];
+    params[0] = mmapAddressDeviceClassProperty;
+
+    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
+    /*if (returnAddress == 0) {
+        printf("Return address is 0\n");
+        return -1;
+    }*/
+
+    if (utils::readRemoteMemory(pid, mmapAddressDeviceClass, deviceClass, DEV_CLASS_LEN) != 0) {
+        printf("Unable to read remote memory at address %lx\n", returnAddress);
+        return -1;
+    }
+
+    injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
+    injector::callMunmap(pid, mmapAddressDeviceClass, DEV_CLASS_LEN);
+
     return 0;
 }
 
-int BluetoothPlusPlus::setDeviceClass(void *deviceClass) {
+int BluetoothPlusPlus::setDeviceClass(dev_class_t *deviceClass) {
     long remoteFunctionAddress = utils::getRemoteFunctionAddress(scanSize, SIGNATURE_SET_DEV_CLASS, memory, remoteBaseAddress);
 
     if (remoteFunctionAddress == -1) {
@@ -60,20 +81,31 @@ int BluetoothPlusPlus::setDeviceClass(void *deviceClass) {
         return -1;
     }
 
-    long mmapAddress = injector::callMmap(pid, 0x400);
-    injector::write(pid, (uint8_t*) mmapAddress, (uint8_t*) deviceClass, DEV_CLASS_LEN);
+    long mmapAddressDeviceClass = injector::callMmap(pid, DEV_CLASS_LEN);
+    injector::write(pid, (uint8_t*) mmapAddressDeviceClass, (uint8_t*) deviceClass, DEV_CLASS_LEN);
+
+    dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
+    long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
+    injector::write(pid, (uint8_t*) mmapAddressDeviceClassProperty, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
 
     long params[1];
-    params[0] = mmapAddress;
+    params[0] = mmapAddressDeviceClassProperty;
 
-    int result = (int) injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
+    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
+    /*if (returnAddress == 0) {
+        printf("Return address is 0\n");
+        return -1;
+    }*/
 
-    injector::callMunmap(pid, mmapAddress, 0x400);
+    injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
+    injector::callMunmap(pid, mmapAddressDeviceClass, DEV_CLASS_LEN);
 
-    if (result != 0) {
-        printf("Unable to set device class, error code: %d", result);
-        return result;
+    /*int result;
+    if (utils::readRemoteMemory(pid, returnAddress, &result, sizeof(int)) != 0) {
+        printf("Unable to read remote memory at address %lx\n", returnAddress);
+        return -1;
     }
 
-    return result;
+    return result;*/
+    return 0;
 }
