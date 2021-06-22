@@ -47,7 +47,7 @@ int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
         return -1;
     }
 
-    long mmapAddressDeviceClass = injector::callMmap(pid, DEV_CLASS_LEN);
+    long mmapAddressDeviceClass = injector::callMmap(pid, sizeof(dev_class_t));
 
     dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
     long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
@@ -62,13 +62,13 @@ int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
         return -1;
     }*/
 
-    if (utils::readRemoteMemory(pid, mmapAddressDeviceClass, deviceClass, DEV_CLASS_LEN) != 0) {
+    if (utils::readRemoteMemory(pid, mmapAddressDeviceClass, deviceClass, sizeof(dev_class_t)) != 0) {
         printf("Unable to read remote memory at address %lx\n", returnAddress);
         return -1;
     }
 
     injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
-    injector::callMunmap(pid, mmapAddressDeviceClass, DEV_CLASS_LEN);
+    injector::callMunmap(pid, mmapAddressDeviceClass, sizeof(dev_class_t));
 
     return 0;
 }
@@ -81,8 +81,8 @@ int BluetoothPlusPlus::setDeviceClass(dev_class_t *deviceClass) {
         return -1;
     }
 
-    long mmapAddressDeviceClass = injector::callMmap(pid, DEV_CLASS_LEN);
-    injector::write(pid, (uint8_t*) mmapAddressDeviceClass, (uint8_t*) deviceClass, DEV_CLASS_LEN);
+    long mmapAddressDeviceClass = injector::callMmap(pid, sizeof(dev_class_t));
+    injector::write(pid, (uint8_t*) mmapAddressDeviceClass, (uint8_t*) deviceClass, sizeof(dev_class_t));
 
     dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
     long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
@@ -98,7 +98,7 @@ int BluetoothPlusPlus::setDeviceClass(dev_class_t *deviceClass) {
     }*/
 
     injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
-    injector::callMunmap(pid, mmapAddressDeviceClass, DEV_CLASS_LEN);
+    injector::callMunmap(pid, mmapAddressDeviceClass, sizeof(dev_class_t));
 
     /*int result;
     if (utils::readRemoteMemory(pid, returnAddress, &result, sizeof(int)) != 0) {

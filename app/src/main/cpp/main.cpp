@@ -30,7 +30,7 @@ int main(int argc, char const* argv[]) {
             int src = stoi(argv[2], nullptr, 16);
 
             dev_class_t deviceClass;
-            memcpy(deviceClass, &src, DEV_CLASS_LEN);
+            memcpy(deviceClass, &src, sizeof(dev_class_t));
 
             int n = sizeof(deviceClass) / sizeof(deviceClass[0]);
             reverse(deviceClass, deviceClass + n);
