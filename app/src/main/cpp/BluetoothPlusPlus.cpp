@@ -58,9 +58,11 @@ int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
     }
 
     long mmapAddressDeviceClass = injector::callMmap(pid, sizeof(dev_class_t));
+    ALOGD("mmapAddressDeviceClass: %lx", mmapAddressDeviceClass);
 
     dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
     long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
+    ALOGD("mmapAddressDeviceClassProperty: %lx", mmapAddressDeviceClassProperty);
     injector::write(pid, (uint8_t*) mmapAddressDeviceClassProperty, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
 
     long params[1];
