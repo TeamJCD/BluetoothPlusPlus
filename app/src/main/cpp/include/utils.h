@@ -15,7 +15,7 @@ namespace utils {
     pid_t getProcessId(const char *processName);
     long getRemoteBaseAddress(pid_t pid, const char *libraryPath);
     int readRemoteMemory(pid_t pid, long address, void *buffer, size_t bufferLength);
-    long getRemoteFunctionAddress(long scanSize, char* signature, const char* memory, long remoteBaseAddress);
+    long getRemoteFunctionAddress(long scanSize, const char* signature, const char* memory, long remoteBaseAddress);
     long getRemoteFunctionAddress(pid_t pid, const char* libraryPath, long localFunctionAddress);
 }
 

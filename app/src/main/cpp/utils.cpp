@@ -137,7 +137,7 @@ int utils::readRemoteMemory(pid_t pid, long address, void *buffer, size_t buffer
     return 0;
 }
 
-long utils::getRemoteFunctionAddress(long scanSize, char *signature, const char* memory, long remoteBaseAddress) {
+long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const char* memory, long remoteBaseAddress) {
     long remoteFunctionAddress = -1;
     bool foundFlag = false;
 
