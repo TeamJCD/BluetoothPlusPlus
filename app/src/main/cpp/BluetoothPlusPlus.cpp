@@ -72,7 +72,7 @@ int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
         injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
         injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
 
-        printf("Return value is %ld\n", returnValue);
+        printf("Return value is %lx\n", returnValue);
         return (int) returnValue;
     }
 
@@ -110,7 +110,7 @@ int BluetoothPlusPlus::setDeviceClass(dev_class_t *deviceClass) {
 
     long returnValue = injector::callRemoteFunction(pid, remoteFunctionAddress, new long[]{ remoteDeviceClassPropertyAddress }, 1);
     if (returnValue != 0) {
-        printf("Return value is %ld\n", returnValue);
+        printf("Return value is %lx\n", returnValue);
     }
 
     injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));

@@ -152,8 +152,11 @@ long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const
 
         if (foundFlag) {
             remoteFunctionAddress = remoteBaseAddress + i;
-            ALOGD("utils::getRemoteFunctionAddress - Found remote function address: %lx", remoteFunctionAddress);
         }
+    }
+
+    if (remoteFunctionAddress != -1) {
+        ALOGD("utils::getRemoteFunctionAddress - Found remote function address: %lx", remoteFunctionAddress);
     }
 
     return remoteFunctionAddress;
