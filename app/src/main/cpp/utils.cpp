@@ -138,7 +138,6 @@ int utils::readRemoteMemory(pid_t pid, long address, void *buffer, size_t buffer
 }
 
 long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const char* memory, long remoteBaseAddress) {
-    long remoteFunctionAddress = -1;
     bool foundFlag = false;
 
     for (long i = 0; i < scanSize; ++i) {
@@ -151,15 +150,13 @@ long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const
         }
 
         if (foundFlag) {
-            remoteFunctionAddress = remoteBaseAddress + i;
+            long remoteFunctionAddress = remoteBaseAddress + i;
+            ALOGD("utils::getRemoteFunctionAddress - Found remote function address: %lx", remoteFunctionAddress);
+            return remoteFunctionAddress;
         }
     }
 
-    if (remoteFunctionAddress != -1) {
-        ALOGD("utils::getRemoteFunctionAddress - Found remote function address: %lx", remoteFunctionAddress);
-    }
-
-    return remoteFunctionAddress;
+    return -1;
 }
 
 long utils::getRemoteFunctionAddress(pid_t pid, const char* libraryPath, long localFunctionAddress) {

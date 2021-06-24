@@ -23,13 +23,11 @@
     #define SIGNATURE_SET_DEV_CLASS "\xb5\x01\x46\x00\x20\x00\xf0\x05\xf8\xb0\xfa\x80\xf0\x40\x09\x80\xbd\xd4\xd4\x2d"
 #endif
 
-#define DEV_CLASS_LEN 3
-
-typedef uint8_t dev_class_t[DEV_CLASS_LEN];
+typedef uint8_t dev_class_t[3];
 
 typedef struct {
     int type = 0x4;
-    int len = DEV_CLASS_LEN;
+    int len = sizeof(dev_class_t);
     void* val;
 } dev_class_property_t;
 
