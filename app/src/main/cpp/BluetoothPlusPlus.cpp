@@ -41,7 +41,7 @@ BluetoothPlusPlus::~BluetoothPlusPlus() {
 
 int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
     // TODO BEGIN: remove this again, just for debugging purposes
-    #if defined(__aarch64__) // arm64 qti
+    /*#if defined(__aarch64__) // arm64 qti
         const char* setTraceLevelSignature = "\xe8\x03\x20\x2a\x1f\x1d\x00\x72\xa0\x00\x00\x54\x28\x14\x00\xb0\x08\xbd\x41\xf9\x00\x01\x00\x39\xc0\x03\x5f\xd6\x28\x14\x00\xb0\x08\xbd\x41\xf9\x00\x01\x40\x39\xc0\x03\x5f\xd6";
     #else // arm aosp
         const char* setTraceLevelSignature = "\x28\x04\xd0\x05\x49\x79\x44\x09\x68\x08\x70\x70\x47\x02\x48\x78\x44\x00\x68\x00\x78\x70\x47\xa8\x73\x17\x00\xb2\x73\x17\x00\x2d";
@@ -49,75 +49,72 @@ int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
     long setTraceLevelAddress = utils::getRemoteFunctionAddress(scanSize, setTraceLevelSignature, memory, remoteBaseAddress);
     ALOGD("setTraceLevel address: %lx", setTraceLevelAddress);
     injector::callRemoteFunction(pid, setTraceLevelAddress, new long[]{6}, 1);
-    // TODO END
+    */// TODO END
+
+    long remoteDeviceClassAddress = injector::callMmap(pid, sizeof(dev_class_t));
+
+    dev_class_property_t deviceClassProperty { .val = (void*) remoteDeviceClassAddress };
+    long remoteDeviceClassPropertyAddress = injector::callMmap(pid, sizeof(deviceClassProperty));
+    injector::write(pid, (uint8_t*) remoteDeviceClassPropertyAddress, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
+
     long remoteFunctionAddress = utils::getRemoteFunctionAddress(scanSize, SIGNATURE_GET_DEV_CLASS, memory, remoteBaseAddress);
 
     if (remoteFunctionAddress == -1) {
+        injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+        injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
+
         printf("Unable to find signature\n");
         return -1;
     }
 
-    long mmapAddressDeviceClass = injector::callMmap(pid, sizeof(dev_class_t));
-    ALOGD("mmapAddressDeviceClass: %lx", mmapAddressDeviceClass);
+    long returnValue = injector::callRemoteFunction(pid, remoteFunctionAddress, new long[]{ remoteDeviceClassPropertyAddress }, 1);
+    if (returnValue != 0) {
+        injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+        injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
 
-    dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
-    long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
-    ALOGD("mmapAddressDeviceClassProperty: %lx", mmapAddressDeviceClassProperty);
-    injector::write(pid, (uint8_t*) mmapAddressDeviceClassProperty, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
+        printf("Return value is %ld\n", returnValue);
+        return (int) returnValue;
+    }
 
-    long params[1];
-    params[0] = mmapAddressDeviceClassProperty;
+    if (utils::readRemoteMemory(pid, remoteDeviceClassAddress, deviceClass, sizeof(dev_class_t)) != 0) {
+        injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+        injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
 
-    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
-    /*if (returnAddress == 0) {
-        printf("Return address is 0\n");
-        return -1;
-    }*/
-
-    if (utils::readRemoteMemory(pid, mmapAddressDeviceClass, deviceClass, sizeof(dev_class_t)) != 0) {
-        printf("Unable to read remote memory at address %lx\n", mmapAddressDeviceClass);
+        printf("Unable to read remote memory at address %lx\n", remoteDeviceClassAddress);
         return -1;
     }
 
-    injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
-    injector::callMunmap(pid, mmapAddressDeviceClass, sizeof(dev_class_t));
+    injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+    injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
 
     return 0;
 }
 
 int BluetoothPlusPlus::setDeviceClass(dev_class_t *deviceClass) {
+    long remoteDeviceClassAddress = injector::callMmap(pid, sizeof(dev_class_t));
+    injector::write(pid, (uint8_t*) remoteDeviceClassAddress, (uint8_t*) deviceClass, sizeof(dev_class_t));
+
+    dev_class_property_t deviceClassProperty { .val = (void*) remoteDeviceClassAddress };
+    long remoteDeviceClassPropertyAddress = injector::callMmap(pid, sizeof(deviceClassProperty));
+    injector::write(pid, (uint8_t*) remoteDeviceClassPropertyAddress, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
+
     long remoteFunctionAddress = utils::getRemoteFunctionAddress(scanSize, SIGNATURE_SET_DEV_CLASS, memory, remoteBaseAddress);
 
     if (remoteFunctionAddress == -1) {
+        injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+        injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
+
         printf("Unable to find signature\n");
         return -1;
     }
 
-    long mmapAddressDeviceClass = injector::callMmap(pid, sizeof(dev_class_t));
-    injector::write(pid, (uint8_t*) mmapAddressDeviceClass, (uint8_t*) deviceClass, sizeof(dev_class_t));
-
-    dev_class_property_t deviceClassProperty { .val = (void*) mmapAddressDeviceClass };
-    long mmapAddressDeviceClassProperty = injector::callMmap(pid, sizeof(deviceClassProperty));
-    injector::write(pid, (uint8_t*) mmapAddressDeviceClassProperty, (uint8_t*) &deviceClassProperty, sizeof(deviceClassProperty));
-
-    long params[1];
-    params[0] = mmapAddressDeviceClassProperty;
-
-    long returnAddress = injector::callRemoteFunction(pid, remoteFunctionAddress, params, 1);
-    /*if (returnAddress == 0) {
-        printf("Return address is 0\n");
-        return -1;
-    }*/
-
-    injector::callMunmap(pid, mmapAddressDeviceClassProperty, sizeof(deviceClassProperty));
-    injector::callMunmap(pid, mmapAddressDeviceClass, sizeof(dev_class_t));
-
-    /*int result;
-    if (utils::readRemoteMemory(pid, returnAddress, &result, sizeof(int)) != 0) {
-        printf("Unable to read remote memory at address %lx\n", returnAddress);
-        return -1;
+    long returnValue = injector::callRemoteFunction(pid, remoteFunctionAddress, new long[]{ remoteDeviceClassPropertyAddress }, 1);
+    if (returnValue != 0) {
+        printf("Return value is %ld\n", returnValue);
     }
 
-    return result;*/
-    return 0;
+    injector::callMunmap(pid, remoteDeviceClassPropertyAddress, sizeof(deviceClassProperty));
+    injector::callMunmap(pid, remoteDeviceClassAddress, sizeof(dev_class_t));
+
+    return (int) returnValue;
 }

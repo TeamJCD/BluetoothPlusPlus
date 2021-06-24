@@ -113,22 +113,22 @@ int utils::readRemoteMemory(pid_t pid, long address, void *buffer, size_t buffer
     if (result < 0) {
         switch (errno) {
             case EINVAL:
-                ALOGE("Utils::readRemoteMemory - Error: Invalid arguments");
+                ALOGE("utils::readRemoteMemory - Error: Invalid arguments");
                 break;
             case EFAULT:
-                ALOGE("Utils::readRemoteMemory - Error: Unable to access target memory address");
+                ALOGE("utils::readRemoteMemory - Error: Unable to access target memory address");
                 break;
             case ENOMEM:
-                ALOGE("Utils::readRemoteMemory - Error: Unable to allocate memory");
+                ALOGE("utils::readRemoteMemory - Error: Unable to allocate memory");
                 break;
             case EPERM:
-                ALOGE("Utils::readRemoteMemory - Error: Insufficient privileges to target process");
+                ALOGE("utils::readRemoteMemory - Error: Insufficient privileges to target process");
                 break;
             case ESRCH:
-                ALOGE("Utils::readRemoteMemory - Error: Process does not exist");
+                ALOGE("utils::readRemoteMemory - Error: Process does not exist");
                 break;
             default:
-                ALOGE("Utils::readRemoteMemory - Error: Unknown error occurred");
+                ALOGE("utils::readRemoteMemory - Error: Unknown error occurred");
         }
 
         return -1;
@@ -152,6 +152,7 @@ long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const
 
         if (foundFlag) {
             remoteFunctionAddress = remoteBaseAddress + i;
+            ALOGD("utils::getRemoteFunctionAddress - Found remote function address: %lx", remoteFunctionAddress);
         }
     }
 
@@ -159,12 +160,12 @@ long utils::getRemoteFunctionAddress(long scanSize, const char *signature, const
 }
 
 long utils::getRemoteFunctionAddress(pid_t pid, const char* libraryPath, long localFunctionAddress) {
-    long remote_base_addr = getRemoteBaseAddress(pid, libraryPath);
-    long local_base_addr = getRemoteBaseAddress(getpid(), libraryPath);
+    long remoteBaseAddress = getRemoteBaseAddress(pid, libraryPath);
+    long localBaseAddress = getRemoteBaseAddress(getpid(), libraryPath);
 
-    if (remote_base_addr == 0 || local_base_addr == 0) {
+    if (remoteBaseAddress == 0 || localBaseAddress == 0) {
         return 0;
     }
 
-    return localFunctionAddress + (remote_base_addr - local_base_addr);
+    return localFunctionAddress + (remoteBaseAddress - localBaseAddress);
 }
