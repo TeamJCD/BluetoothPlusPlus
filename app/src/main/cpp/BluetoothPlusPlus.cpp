@@ -40,17 +40,6 @@ BluetoothPlusPlus::~BluetoothPlusPlus() {
 }
 
 int BluetoothPlusPlus::getDeviceClass(dev_class_t *deviceClass) {
-    // TODO BEGIN: remove this again, just for debugging purposes
-    /*#if defined(__aarch64__) // arm64 qti
-        const char* setTraceLevelSignature = "\xe8\x03\x20\x2a\x1f\x1d\x00\x72\xa0\x00\x00\x54\x28\x14\x00\xb0\x08\xbd\x41\xf9\x00\x01\x00\x39\xc0\x03\x5f\xd6\x28\x14\x00\xb0\x08\xbd\x41\xf9\x00\x01\x40\x39\xc0\x03\x5f\xd6";
-    #else // arm aosp
-        const char* setTraceLevelSignature = "\x28\x04\xd0\x05\x49\x79\x44\x09\x68\x08\x70\x70\x47\x02\x48\x78\x44\x00\x68\x00\x78\x70\x47\xa8\x73\x17\x00\xb2\x73\x17\x00\x2d";
-    #endif
-    long setTraceLevelAddress = utils::getRemoteFunctionAddress(scanSize, setTraceLevelSignature, memory, remoteBaseAddress);
-    ALOGD("setTraceLevel address: %lx", setTraceLevelAddress);
-    injector::callRemoteFunction(pid, setTraceLevelAddress, new long[]{6}, 1);
-    */// TODO END
-
     long remoteDeviceClassAddress = injector::callMmap(pid, sizeof(dev_class_t));
 
     dev_class_property_t deviceClassProperty { .val = (void*) remoteDeviceClassAddress };
