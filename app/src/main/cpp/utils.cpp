@@ -30,7 +30,7 @@ const char* utils::getLibcPath() {
 }
 
 pid_t utils::getProcessId(const char *processName) {
-    if (processName == NULL) {
+    if (processName == nullptr) {
         return -1;
     }
 

@@ -21,7 +21,6 @@ BluetoothPlusPlus::BluetoothPlusPlus() {
         throw runtime_error("Unable to attach to process");
     }
 
-    //long scanSize = 4148176;
     struct stat buf{};
     if (stat(LIBRARY_PATH, &buf) != 0) {
         throw runtime_error("Unable to get file status");
