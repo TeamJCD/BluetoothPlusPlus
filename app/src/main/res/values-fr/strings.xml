@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="error_device_class_empty">Le champ Classe de l'appareil ne peut pas être vide.</string>
+    <string name="error_device_class_invalid">Classe de l'appareil invalide.</string>
+    <string name="error_name_empty">Le champ Nom ne peut pas être vide.</string>
+
+    <string name="menu_new">Nouveau</string>
+    <string name="menu_save">Enregistrer</string>
+    <string name="menu_cancel">Annuler</string>
+    <string name="menu_delete">Supprimer</string>
+
+    <string name="preference_title_device_class">Classe de l'appareil</string>
+    <string name="preference_title_name">Nom</string>
+
+    <string name="screen_title_edit">Modifier la classe de l'appareil</string>
+
+</resources>
