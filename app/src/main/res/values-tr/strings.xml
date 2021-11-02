@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="error_device_class_empty">Cihaz Sınıfı alanı boş bırakılamaz.</string>
+    <string name="error_device_class_invalid">Geçersiz Cihaz Sınıfı.</string>
+    <string name="error_name_empty">İsim alanı boş bırakılmaz.</string>
+
+    <string name="menu_device_class_new">Yeni Cihaz Sınıfı</string>
+    <string name="menu_save">Kaydet</string>
+    <string name="menu_cancel">İptal</string>
+    <string name="menu_delete">Sil</string>
+
+    <string name="preference_title_device_class">Cihaz Sınıfı</string>
+    <string name="preference_title_name">İsim</string>
+
+    <string name="screen_title_edit">Cihaz Sınıfını Düzenle</string>
+
+</resources>
