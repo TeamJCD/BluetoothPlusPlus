@@ -11,27 +11,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
-
-import com.github.teamjcd.bpp.activity.BppDeviceClassEditorActivity;
-import com.github.teamjcd.bpp.preference.BppDeviceClassPreference;
-import com.github.teamjcd.bpp.util.BppUtils;
 import com.github.teamjcd.bpp.R;
-import com.github.teamjcd.bpp.provider.BppDeviceClassColumns;
+import com.github.teamjcd.bpp.activity.BppDeviceClassEditorActivity;
 import com.github.teamjcd.bpp.db.BppDeviceClassStore;
+import com.github.teamjcd.bpp.preference.BppDeviceClassPreference;
+import com.github.teamjcd.bpp.provider.BppDeviceClassColumns;
+import com.github.teamjcd.bpp.util.BppUtils;
 
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.github.teamjcd.bpp.fragment.BppDeviceClassEditorFragment.URI_EXTRA;
 import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.DEVICE_CLASS_URI;
 import static com.github.teamjcd.bpp.db.BppDeviceClassStore.getBluetoothDeviceClassStore;
+import static com.github.teamjcd.bpp.fragment.BppDeviceClassEditorFragment.URI_EXTRA;
 
 public class BppMainFragment extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener {
@@ -41,8 +39,6 @@ public class BppMainFragment extends PreferenceFragmentCompat
     private static final String TAG = BppMainFragment.class.getName();
 
     private static final int FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseDeviceClass("5a020c");
-
-    private static final int REQUEST_ENABLE_BT = 1;
 
     private static final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
     private static final int MENU_MAC_ADDR_NEW = MENU_DEVICE_CLASS_NEW + 1;
@@ -83,23 +79,19 @@ public class BppMainFragment extends PreferenceFragmentCompat
         mUnavailable = mAdapter == null || !mAdapter.isEnabled();
 
         if (mUnavailable) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            saveInitialValue();
+                            fillList();
+                        }
+                    }).launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
         } else {
             saveInitialValue();
         }
 
         fillList();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
-            saveInitialValue();
-            fillList();
-        }
     }
 
     @Override
