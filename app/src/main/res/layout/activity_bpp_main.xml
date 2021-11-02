@@ -13,10 +13,10 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/bluetooth_device_class_settings"
-        android:name="com.github.teamjcd.bpp.BluetoothDeviceClassSettings"
+        android:id="@+id/fragment_bpp_main"
+        android:name="com.github.teamjcd.bpp.fragment.BppMainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tag="BluetoothDeviceClassSettings" />
+        android:tag="BppMainFragment" />
 
 </LinearLayout>

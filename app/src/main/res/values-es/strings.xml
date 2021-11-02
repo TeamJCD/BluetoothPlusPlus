@@ -3,8 +3,8 @@
     <string name="error_device_class_empty">El campo de Clase de Dispositivo no puede estar vacío.</string>
     <string name="error_device_class_invalid">Clase de Dispositivo invalida.</string>
     <string name="error_name_empty">El campo de Nombre no puede estar vacío.</string>
-  
-    <string name="menu_new">Nuevo</string>
+
+    <string name="menu_device_class_new">NEEDS TRANSLATION</string>
     <string name="menu_save">Guardar</string>
     <string name="menu_cancel">Cancelar</string>
     <string name="menu_delete">Borrar</string>

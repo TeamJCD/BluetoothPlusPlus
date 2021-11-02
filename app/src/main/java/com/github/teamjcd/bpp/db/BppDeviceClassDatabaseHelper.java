@@ -13,8 +13,8 @@ import java.io.File;
 
 import static android.provider.BaseColumns._ID;
 
-public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = BluetoothDeviceClassDatabaseHelper.class.getSimpleName();
+public class BppDeviceClassDatabaseHelper extends SQLiteOpenHelper {
+    private static final String TAG = BppDeviceClassDatabaseHelper.class.getSimpleName();
 
     public static final String DATABASE_NAME = "Bluetooth";
     public static final String TABLE_NAME = "DeviceClass";
@@ -36,7 +36,7 @@ public class BluetoothDeviceClassDatabaseHelper extends SQLiteOpenHelper {
     public static final int DEVICE_CLASS_VALUE_INDEX = 2;
     public static final int DEVICE_CLASS_IS_DEFAULT_INDEX = 3;
 
-    public BluetoothDeviceClassDatabaseHelper(Context context) {
+    public BppDeviceClassDatabaseHelper(Context context) {
         super(new DatabaseContext(context), DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -1,13 +1,13 @@
 <resources>
 
-    <string name="app_name">Bluetooth++</string>
+    <string name="app_name" translatable="false">Bluetooth++</string>
 
     <string name="error_device_class_empty">The Device Class field can\u2019t be empty.</string>
     <string name="error_device_class_invalid">Invalid Device Class.</string>
     <string name="error_name_empty">The Name field can\'t be empty.</string>
-    <string name="error_title"/>
+    <string name="error_title" translatable="false" />
 
-    <string name="menu_new">New</string>
+    <string name="menu_device_class_new">New Device Class</string>
     <string name="menu_save">Save</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_delete">Delete</string>

@@ -13,10 +13,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/bluetooth_device_class_editor"
-        android:name="com.github.teamjcd.bpp.BluetoothDeviceClassEditor"
+        android:id="@+id/fragment_bpp_device_class_editor"
+        android:name="com.github.teamjcd.bpp.fragment.BppDeviceClassEditorFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="BluetoothDeviceClassEditor" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

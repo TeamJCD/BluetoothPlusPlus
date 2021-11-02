@@ -4,7 +4,7 @@
     <string name="error_device_class_invalid">فئة الجهاز غير صالحة.</string>
     <string name="error_name_empty">لا يمكن أن يكون حقل الاسم فارغًا.</string>
 
-    <string name="menu_new">جديد</string>
+    <string name="menu_device_class_new">NEEDS TRANSLATION</string>
     <string name="menu_save">حفظ</string>
     <string name="menu_cancel">تجاهل</string>
     <string name="menu_delete">حذف</string>

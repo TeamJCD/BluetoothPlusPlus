@@ -5,7 +5,7 @@
     <string name="error_device_class_invalid">Classe de dispositivo inválida.</string>
     <string name="error_name_empty">A caixa de nome não pode estar vazia.</string>
 
-    <string name="menu_new">Novo</string>
+    <string name="menu_device_class_new">NEEDS TRANSLATION</string>
     <string name="menu_save">Salvar</string>
     <string name="menu_cancel">Cancelar</string>
     <string name="menu_delete">Excluir</string>

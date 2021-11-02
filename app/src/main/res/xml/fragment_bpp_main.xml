@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout="@layout/widget_bpp_selectable">
+
+    <PreferenceCategory
+        android:key="bluetooth_device_class_list"
+        android:title="@string/preference_title_device_class"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

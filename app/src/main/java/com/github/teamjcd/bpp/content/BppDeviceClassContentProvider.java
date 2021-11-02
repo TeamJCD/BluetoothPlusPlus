@@ -1,4 +1,4 @@
-package com.github.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.content;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -6,13 +6,14 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper;
 
 import static android.provider.BaseColumns._ID;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.TABLE_NAME;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.TABLE_NAME;
 
-public class BluetoothDeviceClassContentProvider extends ContentProvider {
+public class BppDeviceClassContentProvider extends ContentProvider {
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     public static final String AUTHORITY = "com.github.teamjcd.bpp.db";
     private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
@@ -20,8 +21,8 @@ public class BluetoothDeviceClassContentProvider extends ContentProvider {
     public static final Uri DEVICE_CLASS_URI = Uri.withAppendedPath(BASE_URI, DEVICE_CLASS_TABLE);
     public static final String DEFAULT_DEVICE_CLASS = "default";
 
-    public static final String CONTENT_TYPE_ROOT = "vnd.android.cursor.dir/vnd.com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.device_class";
-    public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.device_class";
+    public static final String CONTENT_TYPE_ROOT = "vnd.android.cursor.dir/vnd.com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.device_class";
+    public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.device_class";
 
     private static final int ROOT = 0;
     private static final int ID = 1;
@@ -37,7 +38,7 @@ public class BluetoothDeviceClassContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        BluetoothDeviceClassDatabaseHelper dbHelper = new BluetoothDeviceClassDatabaseHelper(getContext());
+        BppDeviceClassDatabaseHelper dbHelper = new BppDeviceClassDatabaseHelper(getContext());
         database = dbHelper.getWritableDatabase();
         return database != null;
     }

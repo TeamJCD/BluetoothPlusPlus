@@ -1,35 +1,35 @@
-package com.github.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.provider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT_INDEX;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_NAME_INDEX;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE_INDEX;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.ID_INDEX;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_IS_DEFAULT_INDEX;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_NAME;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_NAME_INDEX;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.DEVICE_CLASS_VALUE_INDEX;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.ID_INDEX;
 
-public class BluetoothDeviceClassData implements BaseColumns {
+public class BppDeviceClassColumns implements BaseColumns {
     private int id;
     private String name;
     private int deviceClass;
     private int isDefault;
 
-    public BluetoothDeviceClassData(String name, int deviceClass) {
+    public BppDeviceClassColumns(String name, int deviceClass) {
         this.name = name;
         this.deviceClass = deviceClass;
     }
 
-    public BluetoothDeviceClassData(int id, String name, int deviceClass, int isDefault) {
+    public BppDeviceClassColumns(int id, String name, int deviceClass, int isDefault) {
         this(name, deviceClass);
         setId(id);
         setIsDefault(isDefault);
     }
 
-    public BluetoothDeviceClassData() {
+    public BppDeviceClassColumns() {
     }
 
     public int getId() {
@@ -69,8 +69,8 @@ public class BluetoothDeviceClassData implements BaseColumns {
         return isDefault == 1;
     }
 
-    public static BluetoothDeviceClassData readFromCursor(Cursor cursor) {
-        return new BluetoothDeviceClassData(
+    public static BppDeviceClassColumns readFromCursor(Cursor cursor) {
+        return new BppDeviceClassColumns(
                 cursor.getInt(ID_INDEX),
                 cursor.getString(DEVICE_CLASS_NAME_INDEX),
                 cursor.getInt(DEVICE_CLASS_VALUE_INDEX),

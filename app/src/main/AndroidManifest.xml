@@ -22,13 +22,13 @@
         android:fullBackupContent="@xml/backup_descriptor">
 
         <provider
-            android:name=".db.BluetoothDeviceClassContentProvider"
+            android:name=".content.BppDeviceClassContentProvider"
             android:authorities="com.github.teamjcd.bpp.db"
             android:process=":bpp"
             android:exported="false" />
 
         <activity
-            android:name=".BluetoothDeviceClassSettingsActivity"
+            android:name=".activity.BppMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":bpp">
             <intent-filter>
@@ -38,7 +38,7 @@
         </activity>
 
         <activity
-            android:name=".BluetoothDeviceClassEditorActivity"
+            android:name=".activity.BppDeviceClassEditorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":bpp" />
 

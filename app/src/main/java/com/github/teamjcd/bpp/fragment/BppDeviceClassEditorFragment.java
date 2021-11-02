@@ -1,4 +1,4 @@
-package com.github.teamjcd.bpp;
+package com.github.teamjcd.bpp.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,16 +24,18 @@ import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider;
-import com.github.teamjcd.bpp.db.BluetoothDeviceClassData;
-import com.github.teamjcd.bpp.db.BluetoothDeviceClassStore;
+import com.github.teamjcd.bpp.R;
+import com.github.teamjcd.bpp.content.BppDeviceClassContentProvider;
+import com.github.teamjcd.bpp.provider.BppDeviceClassColumns;
+import com.github.teamjcd.bpp.db.BppDeviceClassStore;
+import com.github.teamjcd.bpp.util.BppUtils;
 
-public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
+public class BppDeviceClassEditorFragment extends PreferenceFragmentCompat
         implements OnPreferenceChangeListener, OnKeyListener {
 
-    public final static String URI_EXTRA = "BluetoothDeviceClassEditor.URI_EXTRA";
+    public final static String URI_EXTRA = "BppDeviceClassEditorFragment.URI_EXTRA";
 
-    private final static String TAG = BluetoothDeviceClassEditor.class.getSimpleName();
+    private final static String TAG = BppDeviceClassEditorFragment.class.getSimpleName();
 
     private static final int MENU_DELETE = Menu.FIRST;
     private static final int MENU_SAVE = Menu.FIRST + 1;
@@ -45,8 +47,8 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
     private EditTextPreference mName;
     private EditTextPreference mClass;
 
-    private BluetoothDeviceClassStore mStore;
-    private BluetoothDeviceClassData mBluetoothDeviceClassData;
+    private BppDeviceClassStore mStore;
+    private BppDeviceClassColumns mColumns;
 
     private boolean mNewBluetoothDeviceClass;
     private boolean mReadOnlyBluetoothDeviceClass;
@@ -66,16 +68,16 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
             }
 
             Uri uri = null;
-            if (action.equals(BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT)) {
+            if (action.equals(BppMainFragment.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT)) {
                 uri = intent.getParcelableExtra(URI_EXTRA);
-                if (!uri.isPathPrefixMatch(BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI)) {
+                if (!uri.isPathPrefixMatch(BppDeviceClassContentProvider.DEVICE_CLASS_URI)) {
                     Log.e(TAG, "Edit request not for device class table. Uri: " + uri);
                     activity.finish();
                     return;
                 }
-            } else if (action.equals(BluetoothDeviceClassSettings.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT)) {
+            } else if (action.equals(BppMainFragment.ACTION_BLUETOOTH_DEVICE_CLASS_INSERT)) {
                 Uri insertUri = intent.getParcelableExtra(URI_EXTRA);
-                if (!insertUri.isPathPrefixMatch(BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI)) {
+                if (!insertUri.isPathPrefixMatch(BppDeviceClassContentProvider.DEVICE_CLASS_URI)) {
                     Log.e(TAG, "Insert request not for device class table. Uri: " + insertUri);
                     activity.finish();
                     return;
@@ -86,15 +88,15 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
                 return;
             }
 
-            mStore = BluetoothDeviceClassStore.getBluetoothDeviceClassStore(getContext());
+            mStore = BppDeviceClassStore.getBluetoothDeviceClassStore(getContext());
 
             if (uri != null) {
-                mBluetoothDeviceClassData = mStore.get(uri);
+                mColumns = mStore.get(uri);
             } else {
-                mBluetoothDeviceClassData = new BluetoothDeviceClassData();
+                mColumns = new BppDeviceClassColumns();
             }
 
-            mReadOnlyBluetoothDeviceClass = mBluetoothDeviceClassData.isDefault();
+            mReadOnlyBluetoothDeviceClass = mColumns.isDefault();
 
             if (mReadOnlyBluetoothDeviceClass) {
                 mClass.setEnabled(false);
@@ -108,7 +110,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.bluetooth_device_class_editor);
+        addPreferencesFromResource(R.xml.fragment_bpp_device_class_editor);
         initBluetoothDeviceClassEditorUi();
 
         mName.setOnBindEditTextListener(editText -> {
@@ -151,7 +153,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
         switch (item.getItemId()) {
             case MENU_DELETE:
-                mStore.delete(mBluetoothDeviceClassData.getId());
+                mStore.delete(mColumns.getId());
                 if (activity != null) {
                     activity.finish();
                 }
@@ -208,10 +210,10 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
     private void fillUI(boolean firstTime) {
         if (firstTime) {
-            mName.setText(mBluetoothDeviceClassData.getName());
+            mName.setText(mColumns.getName());
             if (!mNewBluetoothDeviceClass) {
-                mClass.setText(BluetoothDeviceClassUtils
-                        .format(mBluetoothDeviceClassData.getDeviceClass()));
+                mClass.setText(BppUtils
+                        .formatDeviceClass(mColumns.getDeviceClass()));
             }
         }
 
@@ -226,16 +228,16 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
             return false;
         }
 
-        mBluetoothDeviceClassData.setName(mName.getText());
+        mColumns.setName(mName.getText());
 
         if (!mReadOnlyBluetoothDeviceClass) {
-            mBluetoothDeviceClassData.setDeviceClass(BluetoothDeviceClassUtils.parse(mClass.getText()));
+            mColumns.setDeviceClass(BppUtils.parseDeviceClass(mClass.getText()));
         }
 
         if (mNewBluetoothDeviceClass) {
-            mStore.save(mBluetoothDeviceClassData);
+            mStore.save(mColumns);
         } else {
-            mStore.update(mBluetoothDeviceClassData);
+            mStore.update(mColumns);
         }
 
         return true;
@@ -255,7 +257,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
 
         if (errMsg == null) {
             try {
-                BluetoothDeviceClassUtils.parse(cod);
+                BppUtils.parseDeviceClass(cod);
             } catch (Exception e) {
                 errMsg = getResources().getString(R.string.error_device_class_invalid);
             }
@@ -271,7 +273,7 @@ public class BluetoothDeviceClassEditor extends PreferenceFragmentCompat
     public static class ErrorDialog extends DialogFragment {
         private String msg;
 
-        public static void showError(BluetoothDeviceClassEditor editor, String msg) {
+        public static void showError(BppDeviceClassEditorFragment editor, String msg) {
             ErrorDialog dialog = new ErrorDialog();
             dialog.setMessage(msg);
             dialog.show(editor.getChildFragmentManager(), "error");

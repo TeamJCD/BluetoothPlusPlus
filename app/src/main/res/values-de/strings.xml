@@ -5,7 +5,7 @@
     <string name="error_device_class_invalid">Ungültige Geräteklasse.</string>
     <string name="error_device_class_empty">Das Geräteklasse-Feld darf nicht leer sein.</string>
 
-    <string name="menu_new">Neu</string>
+    <string name="menu_device_class_new">Neue Geräteklasse</string>
     <string name="menu_save">Speichern</string>
     <string name="menu_cancel">Verwerfen</string>
     <string name="menu_delete">Löschen</string>

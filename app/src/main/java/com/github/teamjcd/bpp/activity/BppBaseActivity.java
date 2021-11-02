@@ -1,4 +1,4 @@
-package com.github.teamjcd.bpp;
+package com.github.teamjcd.bpp.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-public abstract class BluetoothDeviceClassActivity extends AppCompatActivity {
+public abstract class BppBaseActivity extends AppCompatActivity {
     Fragment mFragment;
 
     @Override

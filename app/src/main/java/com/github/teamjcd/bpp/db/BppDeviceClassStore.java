@@ -4,29 +4,30 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import com.github.teamjcd.bpp.provider.BppDeviceClassColumns;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEFAULT_DEVICE_CLASS;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassContentProvider.DEVICE_CLASS_URI;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassData.readFromCursor;
-import static com.github.teamjcd.bpp.db.BluetoothDeviceClassDatabaseHelper.PROJECTION;
+import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.DEFAULT_DEVICE_CLASS;
+import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.DEVICE_CLASS_URI;
+import static com.github.teamjcd.bpp.provider.BppDeviceClassColumns.readFromCursor;
+import static com.github.teamjcd.bpp.db.BppDeviceClassDatabaseHelper.PROJECTION;
 
 
-public class BluetoothDeviceClassStore {
+public class BppDeviceClassStore {
     private final Context context;
 
-    private BluetoothDeviceClassStore(Context context) {
+    private BppDeviceClassStore(Context context) {
         this.context = context;
     }
 
-    public static BluetoothDeviceClassStore getBluetoothDeviceClassStore(Context context) {
-        return new BluetoothDeviceClassStore(context);
+    public static BppDeviceClassStore getBluetoothDeviceClassStore(Context context) {
+        return new BppDeviceClassStore(context);
     }
 
-    public List<BluetoothDeviceClassData> getAll() {
+    public List<BppDeviceClassColumns> getAll() {
         Cursor cursor = context.getContentResolver().query(
                 DEVICE_CLASS_URI,
                 PROJECTION,
@@ -35,7 +36,7 @@ public class BluetoothDeviceClassStore {
                 null //sortOrder
         );
 
-        List<BluetoothDeviceClassData> btDevices = new ArrayList<>();
+        List<BppDeviceClassColumns> btDevices = new ArrayList<>();
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
@@ -46,15 +47,15 @@ public class BluetoothDeviceClassStore {
         return btDevices;
     }
 
-    public BluetoothDeviceClassData get(int id) {
+    public BppDeviceClassColumns get(int id) {
         return get(Uri.withAppendedPath(DEVICE_CLASS_URI, String.valueOf(id)));
     }
 
-    public BluetoothDeviceClassData getDefault() {
+    public BppDeviceClassColumns getDefault() {
         return get(Uri.withAppendedPath(DEVICE_CLASS_URI, DEFAULT_DEVICE_CLASS));
     }
 
-    public BluetoothDeviceClassData get(Uri btDeviceClassUri) {
+    public BppDeviceClassColumns get(Uri btDeviceClassUri) {
         Cursor cursor = context.getContentResolver().query(
                 btDeviceClassUri,
                 PROJECTION,
@@ -72,7 +73,7 @@ public class BluetoothDeviceClassStore {
         }
     }
 
-    private BluetoothDeviceClassData getFromCursor(Cursor cursor) {
+    private BppDeviceClassColumns getFromCursor(Cursor cursor) {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             return readFromCursor(cursor);
@@ -82,26 +83,26 @@ public class BluetoothDeviceClassStore {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Uri saveDefault(BluetoothDeviceClassData btDeviceClass) {
+    public Uri saveDefault(BppDeviceClassColumns btDeviceClass) {
         btDeviceClass.setIsDefault(1);
         return save(btDeviceClass);
     }
 
-    public Uri save(BluetoothDeviceClassData btDeviceClass) {
+    public Uri save(BppDeviceClassColumns btDeviceClass) {
         ContentValues values = btDeviceClass.toContentValues();
         return context.getContentResolver().insert(DEVICE_CLASS_URI, values);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public int update(BluetoothDeviceClassData btDeviceClass) {
+    public int update(BppDeviceClassColumns btDeviceClass) {
         return update(btDeviceClass.getId(), btDeviceClass);
     }
 
-    public int update(int id, BluetoothDeviceClassData btDeviceClass) {
+    public int update(int id, BppDeviceClassColumns btDeviceClass) {
         return update(Uri.withAppendedPath(DEVICE_CLASS_URI, String.valueOf(id)), btDeviceClass);
     }
 
-    public int update(Uri btDeviceClassUri, BluetoothDeviceClassData btDeviceClass) {
+    public int update(Uri btDeviceClassUri, BppDeviceClassColumns btDeviceClass) {
         return context.getContentResolver().update(
                 btDeviceClassUri,
                 btDeviceClass.toContentValues(),
