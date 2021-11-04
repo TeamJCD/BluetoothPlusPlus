@@ -15,6 +15,6 @@
     <string name="preference_title_device_class">Device Class</string>
     <string name="preference_title_name">Name</string>
 
-    <string name="screen_title_edit">Edit Device Class</string>
+    <string name="screen_title_device_class_edit">Edit Device Class</string>
 
 </resources>

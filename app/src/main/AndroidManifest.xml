@@ -23,7 +23,7 @@
 
         <provider
             android:name=".content.BppDeviceClassContentProvider"
-            android:authorities="com.github.teamjcd.bpp.db"
+            android:authorities="com.github.teamjcd.bpp.content"
             android:process=":bpp"
             android:exported="false" />
 

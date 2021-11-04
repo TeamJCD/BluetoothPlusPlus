@@ -12,6 +12,6 @@
     <string name="preference_title_device_class">Cihaz Sınıfı</string>
     <string name="preference_title_name">İsim</string>
 
-    <string name="screen_title_edit">Cihaz Sınıfını Düzenle</string>
+    <string name="screen_title_device_class_edit">Cihaz Sınıfını Düzenle</string>
 
 </resources>

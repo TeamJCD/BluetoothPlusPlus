@@ -10,7 +10,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:title="@string/screen_title_device_class_edit" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_bpp_device_class_editor"

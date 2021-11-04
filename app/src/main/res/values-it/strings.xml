@@ -5,7 +5,7 @@
     <string name="error_device_class_invalid">Classe Dispositivo sconosciuta.</string>
     <string name="error_name_empty">Il campo "Nome" non può essere vuoto.</string>
 
-    <string name="menu_device_class_new">NEEDS TRANSLATION</string>
+    <string name="menu_device_class_new">New Device Class</string>
     <string name="menu_save">Salva</string>
     <string name="menu_cancel">Annulla</string>
     <string name="menu_delete">Elimina</string>
@@ -13,6 +13,6 @@
     <string name="preference_title_device_class">Classe Dispositivo</string>
     <string name="preference_title_name">Nome</string>
 
-    <string name="screen_title_edit">Modifica Classe Dispositivo</string>
+    <string name="screen_title_device_class_edit">Modifica Classe Dispositivo</string>
 
 </resources>

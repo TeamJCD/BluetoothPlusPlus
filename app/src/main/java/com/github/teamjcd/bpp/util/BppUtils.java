@@ -1,8 +1,8 @@
 package com.github.teamjcd.bpp.util;
 
 public abstract class BppUtils {
-    public static int parseDeviceClass(String deviceClassHex) throws NumberFormatException {
-        return Integer.parseInt(deviceClassHex, 16);
+    public static int parseHex(String hex) throws NumberFormatException {
+        return Integer.parseInt(hex, 16);
     }
 
     public static String formatDeviceClass(int deviceClass) {

@@ -1,4 +1,4 @@
-package com.github.teamjcd.bpp.db;
+package com.github.teamjcd.bpp.database;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -13,40 +13,49 @@ import java.io.File;
 
 import static android.provider.BaseColumns._ID;
 
-public class BppDeviceClassDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = BppDeviceClassDatabaseHelper.class.getSimpleName();
+public class BppDatabaseHelper extends SQLiteOpenHelper {
+    private static final String TAG = BppDatabaseHelper.class.getName();
 
-    public static final String DATABASE_NAME = "Bluetooth";
-    public static final String TABLE_NAME = "DeviceClass";
+    public static final String DATABASE = "BluetoothPlusPlus";
     public static final int DATABASE_VERSION = 1;
 
-    public static final String DEVICE_CLASS_NAME = "name";
-    public static final String DEVICE_CLASS_VALUE = "class";
-    public static final String DEVICE_CLASS_IS_DEFAULT = "is_default";
+    public static final String TABLE_DEVICE_CLASS = "DeviceClass";
+    public static final String TABLE_ADDRESS = "Address";
+
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_VALUE = "value";
+    public static final String COLUMN_IS_DEFAULT = "is_default";
 
     public static final String[] PROJECTION = new String[]{
             _ID,
-            DEVICE_CLASS_NAME,
-            DEVICE_CLASS_VALUE,
-            DEVICE_CLASS_IS_DEFAULT
+            COLUMN_NAME,
+            COLUMN_VALUE,
+            COLUMN_IS_DEFAULT
     };
 
-    public static final int ID_INDEX = 0;
-    public static final int DEVICE_CLASS_NAME_INDEX = 1;
-    public static final int DEVICE_CLASS_VALUE_INDEX = 2;
-    public static final int DEVICE_CLASS_IS_DEFAULT_INDEX = 3;
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_NAME = 1;
+    public static final int INDEX_VALUE = 2;
+    public static final int INDEX_IS_DEFAULT = 3;
 
-    public BppDeviceClassDatabaseHelper(Context context) {
-        super(new DatabaseContext(context), DATABASE_NAME, null, DATABASE_VERSION);
+    public BppDatabaseHelper(Context context) {
+        super(new DatabaseContext(context), DATABASE, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
+        db.execSQL("CREATE TABLE " + TABLE_DEVICE_CLASS + " (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                DEVICE_CLASS_NAME + " TEXT NOT NULL," +
-                DEVICE_CLASS_VALUE + " INTEGER NOT NULL," +
-                DEVICE_CLASS_IS_DEFAULT + " INTEGER DEFAULT 0" +
+                COLUMN_NAME + " TEXT NOT NULL," +
+                COLUMN_VALUE + " INTEGER NOT NULL," +
+                COLUMN_IS_DEFAULT + " INTEGER DEFAULT 0" +
+                ");");
+
+        db.execSQL("CREATE TABLE " + TABLE_ADDRESS + " (" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_NAME + " TEXT NOT NULL," +
+                COLUMN_VALUE + " INTEGER NOT NULL," +
+                COLUMN_IS_DEFAULT + " INTEGER DEFAULT 0" +
                 ");");
     }
 

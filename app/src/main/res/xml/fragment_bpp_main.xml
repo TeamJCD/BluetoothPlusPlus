@@ -4,7 +4,7 @@
     android:layout="@layout/widget_bpp_selectable">
 
     <PreferenceCategory
-        android:key="bluetooth_device_class_list"
+        android:key="device_class_list"
         android:title="@string/preference_title_device_class"
         app:iconSpaceReserved="false" />
 

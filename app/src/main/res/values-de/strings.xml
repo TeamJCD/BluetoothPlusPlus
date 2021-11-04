@@ -13,6 +13,6 @@
     <string name="preference_title_device_class">Geräteklasse</string>
     <string name="preference_title_name">Name</string>
 
-    <string name="screen_title_edit">Geräteklasse bearbeiten</string>
+    <string name="screen_title_device_class_edit">Geräteklasse bearbeiten</string>
 
 </resources>

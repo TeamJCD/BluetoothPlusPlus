@@ -14,7 +14,7 @@ import androidx.preference.PreferenceViewHolder;
 import com.github.teamjcd.bpp.R;
 import com.github.teamjcd.bpp.activity.BppBaseActivity;
 
-import static com.github.teamjcd.bpp.fragment.BppDeviceClassEditorFragment.URI_EXTRA;
+import static com.github.teamjcd.bpp.fragment.BppBaseEditorFragment.URI_EXTRA;
 
 public abstract class BppBasePreference extends Preference implements CompoundButton.OnCheckedChangeListener {
     private final static String TAG = BppBasePreference.class.getName();

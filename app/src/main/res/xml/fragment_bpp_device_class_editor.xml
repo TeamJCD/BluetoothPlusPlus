@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:title="@string/screen_title_edit">
+    android:title="@string/screen_title_device_class_edit">
 
     <EditTextPreference
         android:title="@string/preference_title_name"
         android:dialogTitle="@string/preference_title_name"
-        android:key="bluetooth_device_class_name"
+        android:key="name"
         android:singleLine="true"
         android:persistent="false"
         app:iconSpaceReserved="false"
@@ -15,7 +15,7 @@
     <EditTextPreference
         android:title="@string/preference_title_device_class"
         android:dialogTitle="@string/preference_title_device_class"
-        android:key="bluetooth_device_class_class"
+        android:key="value"
         android:singleLine="true"
         android:inputType="text"
         android:persistent="false"

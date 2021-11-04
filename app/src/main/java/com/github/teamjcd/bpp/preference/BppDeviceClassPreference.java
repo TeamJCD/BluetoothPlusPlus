@@ -5,8 +5,8 @@ import android.net.Uri;
 import com.github.teamjcd.bpp.activity.BppBaseActivity;
 import com.github.teamjcd.bpp.activity.BppDeviceClassEditorActivity;
 
-import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.DEVICE_CLASS_URI;
-import static com.github.teamjcd.bpp.fragment.BppMainFragment.ACTION_BLUETOOTH_DEVICE_CLASS_EDIT;
+import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.URI;
+import static com.github.teamjcd.bpp.fragment.BppMainFragment.ACTION_DEVICE_CLASS_EDIT;
 
 public class BppDeviceClassPreference extends BppBasePreference {
     public BppDeviceClassPreference(Context context) {
@@ -15,7 +15,7 @@ public class BppDeviceClassPreference extends BppBasePreference {
 
     @Override
     protected Uri getContentUri() {
-        return DEVICE_CLASS_URI;
+        return URI;
     }
 
     @Override
@@ -25,6 +25,6 @@ public class BppDeviceClassPreference extends BppBasePreference {
 
     @Override
     protected String getAction() {
-        return ACTION_BLUETOOTH_DEVICE_CLASS_EDIT;
+        return ACTION_DEVICE_CLASS_EDIT;
     }
 }

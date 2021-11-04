@@ -1,18 +1,27 @@
 package com.github.teamjcd.bpp.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.github.teamjcd.bpp.R;
 
 public abstract class BppBaseActivity extends AppCompatActivity {
-    Fragment mFragment;
+    private static final String TAG = BppBaseActivity.class.getName();
+
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+
+        Log.d(TAG, "Starting onCreate");
+
+        setContentView(getLayoutResId());
+        setSupportActionBar(findViewById(R.id.toolbar));
+        setFragment(getSupportFragmentManager().findFragmentById(getFragmentResId()));
     }
 
     protected void setFragment(Fragment fragment) {
@@ -35,4 +44,8 @@ public abstract class BppBaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return mFragment.onOptionsItemSelected(item);
     }
+
+    protected abstract int getLayoutResId();
+
+    protected abstract int getFragmentResId();
 }
