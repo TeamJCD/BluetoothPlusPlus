@@ -9,4 +9,8 @@ public abstract class BppUtils {
         String deviceClassHex = Integer.toHexString(deviceClass);
         return ("000000" + deviceClassHex).substring(deviceClassHex.length());
     }
+
+    public static String formatAddress(int address) {
+        return ""; // TODO
+    }
 }

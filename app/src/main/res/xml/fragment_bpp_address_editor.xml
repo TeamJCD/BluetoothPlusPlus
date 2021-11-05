@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/screen_title_address_edit">
+
+    <EditTextPreference
+        android:title="@string/preference_title_name"
+        android:dialogTitle="@string/preference_title_name"
+        android:key="name"
+        android:singleLine="true"
+        android:persistent="false"
+        app:iconSpaceReserved="false"
+        />
+
+    <EditTextPreference
+        android:title="@string/preference_title_address"
+        android:dialogTitle="@string/preference_title_address"
+        android:key="value"
+        android:singleLine="true"
+        android:inputType="text"
+        android:persistent="false"
+        app:iconSpaceReserved="false"
+        />
+
+</PreferenceScreen>

@@ -27,6 +27,12 @@
             android:process=":bpp"
             android:exported="false" />
 
+        <provider
+            android:name=".content.BppAddressContentProvider"
+            android:authorities="com.github.teamjcd.bpp.content"
+            android:process=":bpp"
+            android:exported="false" />
+
         <activity
             android:name=".activity.BppMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -39,6 +45,11 @@
 
         <activity
             android:name=".activity.BppDeviceClassEditorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:process=":bpp" />
+
+        <activity
+            android:name=".activity.BppAddressEditorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":bpp" />
 

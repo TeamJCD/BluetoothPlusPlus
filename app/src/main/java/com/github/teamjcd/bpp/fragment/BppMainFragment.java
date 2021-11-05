@@ -18,10 +18,15 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import com.github.teamjcd.bpp.R;
+import com.github.teamjcd.bpp.activity.BppAddressEditorActivity;
 import com.github.teamjcd.bpp.activity.BppDeviceClassEditorActivity;
+import com.github.teamjcd.bpp.content.BppAddressContentProvider;
 import com.github.teamjcd.bpp.content.BppDeviceClassContentProvider;
+import com.github.teamjcd.bpp.preference.BppAddressPreference;
 import com.github.teamjcd.bpp.preference.BppDeviceClassPreference;
+import com.github.teamjcd.bpp.provider.BppAddressColumns;
 import com.github.teamjcd.bpp.provider.BppDeviceClassColumns;
+import com.github.teamjcd.bpp.repository.BppAddressRepository;
 import com.github.teamjcd.bpp.repository.BppDeviceClassRepository;
 import com.github.teamjcd.bpp.util.BppUtils;
 
@@ -35,15 +40,20 @@ public class BppMainFragment extends PreferenceFragmentCompat
     public static final String ACTION_DEVICE_CLASS_EDIT = BppMainFragment.class.getName() + ".ACTION_DEVICE_CLASS_EDIT";
     public static final String ACTION_DEVICE_CLASS_INSERT = BppMainFragment.class.getName() + ".ACTION_DEVICE_CLASS_INSERT";
 
+    public static final String ACTION_ADDRESS_EDIT = BppMainFragment.class.getName() + ".ACTION_ADDRESS_EDIT";
+    public static final String ACTION_ADDRESS_INSERT = BppMainFragment.class.getName() + ".ACTION_ADDRESS_INSERT";
+
     private static final String TAG = BppMainFragment.class.getName();
 
     private static final int FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseHex("5a020c");
 
-    private static final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
+    private final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
+    private final int MENU_ADDRESS_NEW = MENU_DEVICE_CLASS_NEW + 1;
 
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
     private BppDeviceClassRepository mDeviceClassRepository;
+    private BppAddressRepository mAddressRepository;
 
     private boolean mUnavailable;
 
@@ -66,6 +76,11 @@ public class BppMainFragment extends PreferenceFragmentCompat
         }
     };
 
+    static {
+        System.loadLibrary("bpp");
+        classInitNative();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +88,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
         mIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mDeviceClassRepository = new BppDeviceClassRepository(getContext());
+        mAddressRepository = new BppAddressRepository(getContext());
 
         mUnavailable = mAdapter == null || !mAdapter.isEnabled();
 
@@ -126,6 +142,10 @@ public class BppMainFragment extends PreferenceFragmentCompat
         menu.add(0, MENU_DEVICE_CLASS_NEW, 0,
                 getResources().getString(R.string.menu_device_class_new))
                 .setIcon(R.drawable.ic_add_24);
+
+        menu.add(0, MENU_ADDRESS_NEW, 1,
+                        getResources().getString(R.string.menu_address_new))
+                .setIcon(R.drawable.ic_add_24);
     }
 
     @Override
@@ -133,6 +153,9 @@ public class BppMainFragment extends PreferenceFragmentCompat
         switch (item.getItemId()) {
             case MENU_DEVICE_CLASS_NEW:
                 addNewDeviceClass();
+                return true;
+            case MENU_ADDRESS_NEW:
+                addNewAddress();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -145,11 +168,13 @@ public class BppMainFragment extends PreferenceFragmentCompat
                 + ", newValue - " + newValue + ", newValue type - "
                 + newValue.getClass());
 
-        if (newValue instanceof String) {
+        if (/* TODO preference is device class preference && */ newValue instanceof String) {
             BppDeviceClassColumns newDeviceClass = mDeviceClassRepository.get(Integer.parseInt((String) newValue));
             if (newDeviceClass != null) {
                 return mAdapter.setBluetoothClass(new BluetoothClass(newDeviceClass.getValue()));
             }
+        } else if (/* TODO preference is address preference && */ newValue instanceof String) {
+            // TODO
         }
 
         return true;
@@ -168,6 +193,8 @@ public class BppMainFragment extends PreferenceFragmentCompat
                             FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS
             ));
         }
+
+        // TODO save initial value for address
     }
 
     private void fillLists() {
@@ -207,6 +234,40 @@ public class BppMainFragment extends PreferenceFragmentCompat
                 }
             }
         }
+
+        List<BppAddressColumns> addrDataList = mAddressRepository.getAll();
+        Log.d(TAG, "fillLists(): addrDataList - " + addrDataList);
+
+        if (!addrDataList.isEmpty()) {
+            final PreferenceGroup addrPrefList = findPreference("address_list");
+
+            if (addrPrefList != null) {
+                addrPrefList.removeAll();
+
+                String address = null; // TODO get current address
+
+                for (BppAddressColumns addrData : addrDataList) {
+                    final BppAddressPreference pref = new BppAddressPreference(getContext());
+
+                    pref.setKey(Integer.toString(addrData.getId()));
+                    pref.setTitle(addrData.getName());
+                    pref.setPersistent(false);
+                    pref.setSelectable(mAdapter.isEnabled());
+                    pref.setOnPreferenceChangeListener(this);
+                    pref.setIconSpaceReserved(false);
+
+                    pref.setSummary(BppUtils.formatAddress(addrData.getValue()));
+
+                    Log.d(TAG, "fillLists(): addrData.getValue - " + addrData.getValue() + " address - " + address);
+
+                    if (address != null && addrData.getValue() == address) { // TODO
+                        pref.setChecked();
+                    }
+
+                    addrPrefList.addPreference(pref);
+                }
+            }
+        }
     }
 
     private void addNewDeviceClass() {
@@ -215,4 +276,13 @@ public class BppMainFragment extends PreferenceFragmentCompat
         intent.putExtra(URI_EXTRA, BppDeviceClassContentProvider.URI);
         startActivity(intent);
     }
+
+    private void addNewAddress() {
+        Intent intent = new Intent(getContext(), BppAddressEditorActivity.class);
+        intent.setAction(ACTION_ADDRESS_INSERT);
+        intent.putExtra(URI_EXTRA, BppAddressContentProvider.URI);
+        startActivity(intent);
+    }
+
+    private static native void classInitNative();
 }

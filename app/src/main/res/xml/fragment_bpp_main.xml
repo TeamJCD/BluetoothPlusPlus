@@ -8,4 +8,9 @@
         android:title="@string/preference_title_device_class"
         app:iconSpaceReserved="false" />
 
+    <PreferenceCategory
+        android:key="address_list"
+        android:title="@string/preference_title_address"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>
