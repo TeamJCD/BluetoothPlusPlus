@@ -65,7 +65,7 @@ public class BppAddressEditorFragment extends BppBaseEditorFragment<BppAddressRe
     }
 
     @Override
-    protected String formatValue(int value) {
+    protected String formatValue(long value) {
         return BppUtils.formatAddress(value);
     }
 }

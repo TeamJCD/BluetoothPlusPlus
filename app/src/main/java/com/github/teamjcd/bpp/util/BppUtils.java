@@ -1,16 +1,21 @@
 package com.github.teamjcd.bpp.util;
 
+import java.util.Optional;
+
 public abstract class BppUtils {
-    public static int parseHex(String hex) throws NumberFormatException {
-        return Integer.parseInt(hex, 16);
+    public static Long parseHex(String hex) throws NumberFormatException {
+        return Optional.ofNullable(hex)
+                .map(s -> s.replaceAll("[^\\dA-F]", ""))
+                .map(s -> Long.parseLong(s, 16))
+                .orElse(null);
     }
 
-    public static String formatDeviceClass(int deviceClass) {
-        String deviceClassHex = Integer.toHexString(deviceClass);
+    public static String formatDeviceClass(long deviceClass) {
+        String deviceClassHex = Long.toHexString(deviceClass);
         return ("000000" + deviceClassHex).substring(deviceClassHex.length());
     }
 
-    public static String formatAddress(int address) {
+    public static String formatAddress(long address) {
         return ""; // TODO
     }
 }

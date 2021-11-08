@@ -278,5 +278,5 @@ public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T ex
 
     protected abstract String validate();
 
-    protected abstract String formatValue(int value);
+    protected abstract String formatValue(long value);
 }

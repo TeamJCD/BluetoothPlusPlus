@@ -6,5 +6,7 @@
     <permission name="android.permission.BLUETOOTH_ADMIN"/>
     <permission name="android.permission.ACCESS_COARSE_LOCATION"/>
     <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
+    <permission name="android.permission.BLUETOOTH_CONNECT"/>
+    <permission name="android.permission.LOCAL_MAC_ADDRESS"/>
   </privapp-permissions>
 </permissions>

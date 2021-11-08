@@ -1,5 +1,6 @@
 package com.github.teamjcd.bpp.fragment;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.content.BroadcastReceiver;
@@ -34,6 +35,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.github.teamjcd.bpp.fragment.BppBaseEditorFragment.URI_EXTRA;
+import static java.lang.Math.toIntExact;
 
 public class BppMainFragment extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener {
@@ -45,7 +47,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
 
     private static final String TAG = BppMainFragment.class.getName();
 
-    private static final int FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseHex("5a020c");
+    private static final long FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseHex("5a020c");
 
     private final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
     private final int MENU_ADDRESS_NEW = MENU_DEVICE_CLASS_NEW + 1;
@@ -76,10 +78,10 @@ public class BppMainFragment extends PreferenceFragmentCompat
         }
     };
 
-    static {
+    /*static {
         System.loadLibrary("bpp");
         classInitNative();
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,7 +173,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
         if (/* TODO preference is device class preference && */ newValue instanceof String) {
             BppDeviceClassColumns newDeviceClass = mDeviceClassRepository.get(Integer.parseInt((String) newValue));
             if (newDeviceClass != null) {
-                return mAdapter.setBluetoothClass(new BluetoothClass(newDeviceClass.getValue()));
+                return mAdapter.setBluetoothClass(new BluetoothClass(toIntExact(newDeviceClass.getValue())));
             }
         } else if (/* TODO preference is address preference && */ newValue instanceof String) {
             // TODO
@@ -180,6 +182,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
         return true;
     }
 
+    @SuppressLint("HardwareIds")
     private void saveInitialValues() {
         BppDeviceClassColumns defaultClass = mDeviceClassRepository.getDefault();
         Log.d(TAG, "saveInitialValues(): defaultClass - " + defaultClass);
@@ -194,9 +197,17 @@ public class BppMainFragment extends PreferenceFragmentCompat
             ));
         }
 
-        // TODO save initial value for address
+        BppAddressColumns defaultAddress = mAddressRepository.getDefault();
+        Log.d(TAG, "saveInitialValues(): defaultAddress - " + defaultAddress);
+        if (defaultAddress == null) {
+            Long address = BppUtils.parseHex(mAdapter.getAddress());
+            if (address != null) {
+                mAddressRepository.saveDefault(new BppAddressColumns(mAdapter.getName(), address));
+            }
+        }
     }
 
+    @SuppressLint("HardwareIds")
     private void fillLists() {
         List<BppDeviceClassColumns> codDataList = mDeviceClassRepository.getAll();
         Log.d(TAG, "fillLists(): codDataList - " + codDataList);
@@ -244,7 +255,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
             if (addrPrefList != null) {
                 addrPrefList.removeAll();
 
-                String address = null; // TODO get current address
+                Long address = BppUtils.parseHex(mAdapter.getAddress());
 
                 for (BppAddressColumns addrData : addrDataList) {
                     final BppAddressPreference pref = new BppAddressPreference(getContext());
@@ -260,7 +271,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
 
                     Log.d(TAG, "fillLists(): addrData.getValue - " + addrData.getValue() + " address - " + address);
 
-                    if (address != null && addrData.getValue() == address) { // TODO
+                    if (address != null && address.equals(addrData.getValue())) {
                         pref.setChecked();
                     }
 
@@ -284,5 +295,5 @@ public class BppMainFragment extends PreferenceFragmentCompat
         startActivity(intent);
     }
 
-    private static native void classInitNative();
+    //private static native void classInitNative();
 }

@@ -2,19 +2,24 @@
 
     <string name="app_name" translatable="false">Bluetooth++</string>
 
+    <string name="error_address_empty">The MAC Address field can\u2019t be empty.</string>
+    <string name="error_address_invalid">Invalid MAC Address.</string>
     <string name="error_device_class_empty">The Device Class field can\u2019t be empty.</string>
     <string name="error_device_class_invalid">Invalid Device Class.</string>
     <string name="error_name_empty">The Name field can\'t be empty.</string>
     <string name="error_title" translatable="false" />
 
+    <string name="menu_address_new">New MAC Address</string>
     <string name="menu_device_class_new">New Device Class</string>
     <string name="menu_save">Save</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_delete">Delete</string>
 
+    <string name="preference_title_address">MAC Address</string>
     <string name="preference_title_device_class">Device Class</string>
     <string name="preference_title_name">Name</string>
 
+    <string name="screen_title_address_edit">Edit MAC Address</string>
     <string name="screen_title_device_class_edit">Edit Device Class</string>
 
 </resources>

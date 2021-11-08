@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 import static android.provider.BaseColumns._ID;
 import static com.github.teamjcd.bpp.content.BppBaseContentProvider.DEFAULT_URI;
-import static com.github.teamjcd.bpp.content.BppDeviceClassContentProvider.URI;
 import static com.github.teamjcd.bpp.database.BppDatabaseHelper.*;
 
 public abstract class BppBaseRepository<T extends BppBaseColumns> {
@@ -87,7 +86,7 @@ public abstract class BppBaseRepository<T extends BppBaseColumns> {
 
     public Uri save(T columns) {
         ContentValues values = toContentValues(columns);
-        return context.getContentResolver().insert(URI, values);
+        return context.getContentResolver().insert(getUri(), values);
     }
 
     @SuppressWarnings("UnusedReturnValue")

@@ -5,15 +5,15 @@ import android.provider.BaseColumns;
 public abstract class BppBaseColumns implements BaseColumns {
     private int id;
     private String name;
-    private int value;
+    private long value;
     private int isDefault;
 
-    public BppBaseColumns(String name, int value) {
+    public BppBaseColumns(String name, long value) {
         setName(name);
         setValue(value);
     }
 
-    public BppBaseColumns(int id, String name, int value, int isDefault) {
+    public BppBaseColumns(int id, String name, long value, int isDefault) {
         this(name, value);
         setId(id);
         setIsDefault(isDefault);
@@ -38,11 +38,11 @@ public abstract class BppBaseColumns implements BaseColumns {
         this.name = name;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(long value) {
         this.value = value;
     }
 

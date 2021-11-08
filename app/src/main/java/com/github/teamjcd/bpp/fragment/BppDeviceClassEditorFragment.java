@@ -65,7 +65,7 @@ public class BppDeviceClassEditorFragment extends BppBaseEditorFragment<BppDevic
     }
 
     @Override
-    protected String formatValue(int value) {
+    protected String formatValue(long value) {
         return BppUtils.formatDeviceClass(value);
     }
 }
