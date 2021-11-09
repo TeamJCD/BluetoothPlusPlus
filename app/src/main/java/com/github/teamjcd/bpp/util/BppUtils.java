@@ -11,11 +11,16 @@ public abstract class BppUtils {
     }
 
     public static String formatDeviceClass(long deviceClass) {
-        String deviceClassHex = Long.toHexString(deviceClass);
-        return ("000000" + deviceClassHex).substring(deviceClassHex.length());
+        return String.format("%06x", deviceClass);
     }
 
     public static String formatAddress(long address) {
-        return ""; // TODO
+        return String.format("%02x:%02x:%02x:%02x:%02x:%02x",
+                (address >> 40) & 0xff,
+                (address >> 32) & 0xff,
+                (address >> 24) & 0xff,
+                (address >> 16) & 0xff,
+                (address >> 8) & 0xff,
+                address & 0xff);
     }
 }

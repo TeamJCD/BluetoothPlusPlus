@@ -8,17 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import com.github.teamjcd.bpp.database.BppDatabaseHelper;
 
-import java.util.Objects;
-
 import static android.provider.BaseColumns._ID;
 import static com.github.teamjcd.bpp.database.BppDatabaseHelper.COLUMN_IS_DEFAULT;
 import static com.github.teamjcd.bpp.database.BppDatabaseHelper.COLUMN_VALUE;
 
 public abstract class BppBaseContentProvider extends ContentProvider {
-    public static final String AUTHORITY = Objects.requireNonNull(BppBaseContentProvider.class.getPackage()).getName();
     public static final String DEFAULT_URI = "default";
-
-    protected static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 
     private static final int ROOT = 0;
     private static final int ID = 1;
@@ -29,9 +24,11 @@ public abstract class BppBaseContentProvider extends ContentProvider {
     private SQLiteDatabase database;
 
     public BppBaseContentProvider() {
-        URI_MATCHER.addURI(AUTHORITY, getTable(), ROOT);
-        URI_MATCHER.addURI(AUTHORITY, getTable() + "/#", ID);
-        URI_MATCHER.addURI(AUTHORITY, getTable() + "/" + DEFAULT_URI, DEFAULT);
+        String authority = getAuthority();
+
+        URI_MATCHER.addURI(authority, getTable(), ROOT);
+        URI_MATCHER.addURI(authority, getTable() + "/#", ID);
+        URI_MATCHER.addURI(authority, getTable() + "/" + DEFAULT_URI, DEFAULT);
     }
 
     @Override
@@ -113,6 +110,10 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
         String lastPathSegment = uri.getLastPathSegment();
         return database.update(getTable(), values, _ID + " = ?", new String[]{ lastPathSegment });
+    }
+
+    private String getAuthority() {
+        return getClass().getName();
     }
 
     protected abstract String getTable();

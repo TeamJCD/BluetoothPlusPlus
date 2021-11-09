@@ -14,7 +14,7 @@ import java.io.File;
 import static android.provider.BaseColumns._ID;
 
 public class BppDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = BppDatabaseHelper.class.getName();
+    private static final String TAG = BppDatabaseHelper.class.getSimpleName();
 
     public static final String DATABASE = "BluetoothPlusPlus";
     public static final int DATABASE_VERSION = 1;

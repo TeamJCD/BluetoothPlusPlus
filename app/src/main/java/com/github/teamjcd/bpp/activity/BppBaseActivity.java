@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import com.github.teamjcd.bpp.R;
 
 public abstract class BppBaseActivity extends AppCompatActivity {
-    private static final String TAG = BppBaseActivity.class.getName();
+    private static final String TAG = BppBaseActivity.class.getSimpleName();
 
     private Fragment mFragment;
 

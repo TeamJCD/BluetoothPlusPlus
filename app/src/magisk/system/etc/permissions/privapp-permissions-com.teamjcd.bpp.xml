@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
   <privapp-permissions package="com.github.teamjcd.bpp">
-    <permission name="android.permission.BLUETOOTH_PRIVILEGED"/>
-    <permission name="android.permission.BLUETOOTH"/>
-    <permission name="android.permission.BLUETOOTH_ADMIN"/>
-    <permission name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
-    <permission name="android.permission.BLUETOOTH_CONNECT"/>
-    <permission name="android.permission.LOCAL_MAC_ADDRESS"/>
+    <permission name="android.permission.ACCESS_COARSE_LOCATION" />
+    <permission name="android.permission.BLUETOOTH" />
+    <permission name="android.permission.BLUETOOTH_ADMIN" />
+    <permission name="android.permission.BLUETOOTH_CONNECT" />
+    <permission name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <permission name="android.permission.LOCAL_MAC_ADDRESS" />
+    <permission name="android.permission.WRITE_SECURE_SETTINGS" />
   </privapp-permissions>
 </permissions>

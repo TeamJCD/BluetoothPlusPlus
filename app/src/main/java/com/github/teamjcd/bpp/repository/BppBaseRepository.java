@@ -124,7 +124,7 @@ public abstract class BppBaseRepository<T extends BppBaseColumns> {
         T result = newInstance.get();
         result.setId(cursor.getInt(INDEX_ID));
         result.setName(cursor.getString(INDEX_NAME));
-        result.setValue(cursor.getInt(INDEX_VALUE));
+        result.setValue(cursor.getLong(INDEX_VALUE));
         result.setIsDefault(cursor.getInt(INDEX_IS_DEFAULT));
         return result;
     }

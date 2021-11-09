@@ -45,7 +45,7 @@ public class BppMainFragment extends PreferenceFragmentCompat
     public static final String ACTION_ADDRESS_EDIT = BppMainFragment.class.getName() + ".ACTION_ADDRESS_EDIT";
     public static final String ACTION_ADDRESS_INSERT = BppMainFragment.class.getName() + ".ACTION_ADDRESS_INSERT";
 
-    private static final String TAG = BppMainFragment.class.getName();
+    private static final String TAG = BppMainFragment.class.getSimpleName();
 
     private static final long FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseHex("5a020c");
 

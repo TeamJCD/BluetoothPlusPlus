@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.appcompat.app.ActionBar;
 
 public abstract class BppBaseEditorActivity extends BppBaseActivity {
-    private static final String TAG = BppBaseEditorActivity.class.getName();
+    private static final String TAG = BppBaseEditorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedState) {

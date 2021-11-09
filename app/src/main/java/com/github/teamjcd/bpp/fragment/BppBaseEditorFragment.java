@@ -24,7 +24,7 @@ import com.github.teamjcd.bpp.util.BppUtils;
 
 public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T extends BppBaseColumns> extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener, View.OnKeyListener {
-    private final static String TAG = BppBaseEditorFragment.class.getName();
+    private final static String TAG = BppBaseEditorFragment.class.getSimpleName();
 
     public final static String URI_EXTRA = BppBaseEditorFragment.class.getName() + ".URI_EXTRA";
 

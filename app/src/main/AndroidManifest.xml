@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.teamjcd.bpp">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -21,13 +21,13 @@
 
         <provider
             android:name=".content.BppDeviceClassContentProvider"
-            android:authorities="com.github.teamjcd.bpp.content"
+            android:authorities="com.github.teamjcd.bpp.content.BppDeviceClassContentProvider"
             android:process=":bpp"
             android:exported="false" />
 
         <provider
             android:name=".content.BppAddressContentProvider"
-            android:authorities="com.github.teamjcd.bpp.content"
+            android:authorities="com.github.teamjcd.bpp.content.BppAddressContentProvider"
             android:process=":bpp"
             android:exported="false" />
 
