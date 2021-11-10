@@ -28,18 +28,18 @@ public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T ex
 
     public final static String URI_EXTRA = BppBaseEditorFragment.class.getName() + ".URI_EXTRA";
 
-    private final int MENU_DELETE = Menu.FIRST;
-    private final int MENU_SAVE = MENU_DELETE + 1;
-    private final int MENU_CANCEL = MENU_SAVE + 1;
+    protected final static int MENU_DELETE = Menu.FIRST;
+    protected final static int MENU_SAVE = MENU_DELETE + 1;
+    protected final static int MENU_CANCEL = MENU_SAVE + 1;
 
-    private EditTextPreference mName;
-    private EditTextPreference mValue;
+    protected EditTextPreference mName;
+    protected EditTextPreference mValue;
 
-    private U mRepository;
-    private T mColumns;
+    protected U mRepository;
+    protected T mColumns;
 
-    private boolean mNew;
-    private boolean mReadOnly;
+    protected boolean mNew;
+    protected boolean mReadOnly;
 
     public EditTextPreference getNamePreference() {
         return mName;
@@ -239,7 +239,7 @@ public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T ex
         BppBaseEditorFragment.ErrorDialog.showError(this, msg);
     }
 
-    public static class ErrorDialog extends DialogFragment {
+    private static class ErrorDialog extends DialogFragment {
         private String msg;
 
         public static void showError(PreferenceFragmentCompat editor, String msg) {
@@ -248,8 +248,8 @@ public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T ex
             dialog.show(editor.getChildFragmentManager(), "error");
         }
 
-        @Override
         @NonNull
+        @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             //noinspection ConstantConditions
             return new AlertDialog.Builder(getContext())

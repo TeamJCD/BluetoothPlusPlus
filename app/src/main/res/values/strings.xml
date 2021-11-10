@@ -11,6 +11,7 @@
 
     <string name="menu_address_new">New MAC Address</string>
     <string name="menu_device_class_new">New Device Class</string>
+    <string name="menu_obtain">Obtain</string>
     <string name="menu_save">Save</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_delete">Delete</string>

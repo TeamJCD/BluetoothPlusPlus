@@ -166,17 +166,24 @@ public class BppMainFragment extends PreferenceFragmentCompat
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Log.d(TAG, "onPreferenceChange(): Preference - " + preference
-                + ", newValue - " + newValue + ", newValue type - "
-                + newValue.getClass());
+        PreferenceGroup preferenceGroup = preference.getParent();
 
-        if (/* TODO preference is device class preference && */ newValue instanceof String) {
-            BppDeviceClassColumns newDeviceClass = mDeviceClassRepository.get(Integer.parseInt((String) newValue));
-            if (newDeviceClass != null) {
-                return mAdapter.setBluetoothClass(new BluetoothClass(toIntExact(newDeviceClass.getValue())));
+        Log.d(TAG, "onPreferenceChange(): Preference - " + preference + ", newValue - " + newValue
+                + ", newValue type - " + newValue.getClass() + ", preferenceGroup - " + preferenceGroup);
+
+        if (preferenceGroup != null) {
+            switch (preferenceGroup.getKey()) {
+                case "device_class_list":
+                    BppDeviceClassColumns newDeviceClass = mDeviceClassRepository.get(Integer.parseInt((String) newValue));
+                    if (newDeviceClass != null) {
+                        return mAdapter.setBluetoothClass(new BluetoothClass(toIntExact(newDeviceClass.getValue())));
+                    }
+                    break;
+                case "address_list":
+                    // TODO find a hacky way to set bluetooth address
+                    break;
+                default:
             }
-        } else if (/* TODO preference is address preference && */ newValue instanceof String) {
-            // TODO
         }
 
         return true;
