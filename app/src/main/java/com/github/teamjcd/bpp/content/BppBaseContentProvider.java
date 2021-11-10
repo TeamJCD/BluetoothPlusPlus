@@ -19,16 +19,16 @@ public abstract class BppBaseContentProvider extends ContentProvider {
     private static final int ID = 1;
     private static final int DEFAULT = 2;
 
-    private final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private SQLiteDatabase database;
 
-    public BppBaseContentProvider() {
+    protected BppBaseContentProvider() {
         String authority = getAuthority();
 
-        URI_MATCHER.addURI(authority, getTable(), ROOT);
-        URI_MATCHER.addURI(authority, getTable() + "/#", ID);
-        URI_MATCHER.addURI(authority, getTable() + "/" + DEFAULT_URI, DEFAULT);
+        uriMatcher.addURI(authority, getTable(), ROOT);
+        uriMatcher.addURI(authority, getTable() + "/#", ID);
+        uriMatcher.addURI(authority, getTable() + "/" + DEFAULT_URI, DEFAULT);
     }
 
     @Override
@@ -40,7 +40,7 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        int match = URI_MATCHER.match(uri);
+        int match = uriMatcher.match(uri);
 
         String where = null;
         String[] whereArgs = null;
@@ -65,7 +65,7 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        switch (URI_MATCHER.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ROOT:
                 return "vnd.android.cursor.dir/vnd.com.github.teamjcd.bpp.content.BppBaseContentProvider.dir";
             case ID:
@@ -78,7 +78,7 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        int match = URI_MATCHER.match(uri);
+        int match = uriMatcher.match(uri);
 
         if (match != ROOT) {
             return null;
@@ -90,7 +90,7 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int match = URI_MATCHER.match(uri);
+        int match = uriMatcher.match(uri);
 
         if (match != ID) {
             return 0;
@@ -102,7 +102,7 @@ public abstract class BppBaseContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int match = URI_MATCHER.match(uri);
+        int match = uriMatcher.match(uri);
 
         if (match != ID) {
             values.remove(COLUMN_VALUE);

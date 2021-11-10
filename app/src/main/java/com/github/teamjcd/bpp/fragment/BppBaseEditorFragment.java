@@ -24,13 +24,13 @@ import com.github.teamjcd.bpp.util.BppUtils;
 
 public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T extends BppBaseColumns> extends PreferenceFragmentCompat
         implements Preference.OnPreferenceChangeListener, View.OnKeyListener {
-    private final static String TAG = BppBaseEditorFragment.class.getSimpleName();
+    private static final String TAG = BppBaseEditorFragment.class.getSimpleName();
 
-    public final static String URI_EXTRA = BppBaseEditorFragment.class.getName() + ".URI_EXTRA";
+    public static final String URI_EXTRA = BppBaseEditorFragment.class.getName() + ".URI_EXTRA";
 
-    protected final static int MENU_DELETE = Menu.FIRST;
-    protected final static int MENU_SAVE = MENU_DELETE + 1;
-    protected final static int MENU_CANCEL = MENU_SAVE + 1;
+    protected static final int MENU_DELETE = Menu.FIRST;
+    protected static final int MENU_SAVE = MENU_DELETE + 1;
+    protected static final int MENU_CANCEL = MENU_SAVE + 1;
 
     protected EditTextPreference mName;
     protected EditTextPreference mValue;
@@ -157,10 +157,8 @@ public abstract class BppBaseEditorFragment<U extends BppBaseRepository<T>, T ex
                 }
                 return true;
             case MENU_SAVE:
-                if (validateAndSave()) {
-                    if (activity != null) {
-                        activity.finish();
-                    }
+                if (validateAndSave() && activity != null) {
+                    activity.finish();
                 }
                 return true;
             case MENU_CANCEL:

@@ -8,18 +8,18 @@ public abstract class BppBaseColumns implements BaseColumns {
     private long value;
     private int isDefault;
 
-    public BppBaseColumns(String name, long value) {
+    protected BppBaseColumns(String name, long value) {
         setName(name);
         setValue(value);
     }
 
-    public BppBaseColumns(int id, String name, long value, int isDefault) {
+    protected BppBaseColumns(int id, String name, long value, int isDefault) {
         this(name, value);
         setId(id);
         setIsDefault(isDefault);
     }
 
-    public BppBaseColumns() {
+    protected BppBaseColumns() {
     }
 
     public int getId() {

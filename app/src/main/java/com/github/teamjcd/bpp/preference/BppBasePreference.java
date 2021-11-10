@@ -17,23 +17,23 @@ import com.github.teamjcd.bpp.activity.BppBaseActivity;
 import static com.github.teamjcd.bpp.fragment.BppBaseEditorFragment.URI_EXTRA;
 
 public abstract class BppBasePreference extends Preference implements CompoundButton.OnCheckedChangeListener {
-    private final static String TAG = BppBasePreference.class.getSimpleName();
+    private static final String TAG = BppBasePreference.class.getSimpleName();
 
     private String mSelectedKey = null;
     private CompoundButton mCurrentChecked = null;
     private boolean mProtectFromCheckedChange = false;
     private boolean mSelectable = true;
 
-    public BppBasePreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    protected BppBasePreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWidgetLayoutResource(R.layout.widget_bpp_selectable);
     }
 
-    public BppBasePreference(Context context, AttributeSet attrs) {
+    protected BppBasePreference(Context context, AttributeSet attrs) {
         this(context, attrs, androidx.preference.R.attr.preferenceStyle);
     }
 
-    public BppBasePreference(Context context) {
+    protected BppBasePreference(Context context) {
         this(context, null);
     }
 
@@ -106,6 +106,7 @@ public abstract class BppBasePreference extends Preference implements CompoundBu
         }
     }
 
+    @Override
     public void setSelectable(boolean selectable) {
         mSelectable = selectable;
     }

@@ -2,6 +2,7 @@ package com.github.teamjcd.bpp.activity;
 
 import com.github.teamjcd.bpp.R;
 
+@SuppressWarnings("squid:S110")
 public class BppAddressEditorActivity extends BppBaseEditorActivity {
     @Override
     protected int getLayoutResId() {

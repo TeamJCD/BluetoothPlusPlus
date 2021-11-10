@@ -17,9 +17,7 @@ import com.phearme.btscanselector.ABTScanSelectorEventsHandler;
 import com.phearme.btscanselector.BTScanSelectorBuilder;
 
 public class BppAddressEditorFragment extends BppBaseEditorFragment<BppAddressRepository, BppAddressColumns> {
-    private final static String TAG = BppAddressEditorFragment.class.getSimpleName();
-
-    private final static int MENU_OBTAIN = MENU_DELETE - 1;
+    private static final int MENU_OBTAIN = MENU_DELETE - 1;
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

@@ -49,8 +49,8 @@ public class BppMainFragment extends PreferenceFragmentCompat
 
     private static final long FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS = BppUtils.parseHex("5a020c");
 
-    private final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
-    private final int MENU_ADDRESS_NEW = MENU_DEVICE_CLASS_NEW + 1;
+    private static final int MENU_DEVICE_CLASS_NEW = Menu.FIRST;
+    private static final int MENU_ADDRESS_NEW = MENU_DEVICE_CLASS_NEW + 1;
 
     private IntentFilter mIntentFilter;
     private BluetoothAdapter mAdapter;
@@ -69,6 +69,8 @@ public class BppMainFragment extends PreferenceFragmentCompat
                 switch (state) {
                     case BluetoothAdapter.STATE_ON:
                         saveInitialValues();
+                        fillLists();
+                        break;
                     case BluetoothAdapter.STATE_OFF:
                         fillLists();
                         break;
@@ -242,9 +244,8 @@ public class BppMainFragment extends PreferenceFragmentCompat
                     Log.d(TAG, "fillLists(): codData.getValue - " + codData.getValue()
                             + " deviceClass - " + (bluetoothClass != null ? bluetoothClass.getClassOfDevice() : null));
 
-                    if (bluetoothClass != null && codData.getValue() == bluetoothClass.getClassOfDevice()) {
-                        pref.setChecked();
-                    } else if (bluetoothClass == null && codData.getValue() == FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS) {
+                    if ((bluetoothClass != null && codData.getValue() == bluetoothClass.getClassOfDevice())
+                            || (bluetoothClass == null && codData.getValue() == FALLBACK_DEFAULT_BLUETOOTH_DEVICE_CLASS)) {
                         pref.setChecked();
                     }
 

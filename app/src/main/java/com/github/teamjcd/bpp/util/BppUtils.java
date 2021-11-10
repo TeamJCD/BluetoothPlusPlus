@@ -2,7 +2,11 @@ package com.github.teamjcd.bpp.util;
 
 import java.util.Optional;
 
+@SuppressWarnings("squid:S1610")
 public abstract class BppUtils {
+    private BppUtils() {
+    }
+
     public static Long parseHex(String hex) throws NumberFormatException {
         return Optional.ofNullable(hex)
                 .map(s -> s.replaceAll("[^\\dA-F]", ""))

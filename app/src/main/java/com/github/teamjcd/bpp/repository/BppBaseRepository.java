@@ -18,7 +18,7 @@ public abstract class BppBaseRepository<T extends BppBaseColumns> {
     private final Context context;
     private final Supplier<T> newInstance;
 
-    public BppBaseRepository(Context context, Supplier<T> newInstance) {
+    protected BppBaseRepository(Context context, Supplier<T> newInstance) {
         this.context = context;
         this.newInstance = newInstance;
     }

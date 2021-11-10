@@ -75,13 +75,11 @@ public class BppDatabaseHelper extends SQLiteOpenHelper {
             File externalStorageFile = (externalStorageFiles.length < 2) ? externalStorageFiles[0] : externalStorageFiles[1];
             File databaseFile = new File(externalStorageFile.getAbsolutePath() + File.separator + name);
 
-            if (databaseFile.getParentFile() != null && !databaseFile.getParentFile().exists()) {
-                if (!databaseFile.getParentFile().mkdirs()) {
-                    Log.e(TAG, "getDatabasePath(): Unable to create directory "
-                            + databaseFile.getParentFile());
+            if (databaseFile.getParentFile() != null && !databaseFile.getParentFile().exists() && !databaseFile.getParentFile().mkdirs()) {
+                Log.e(TAG, "getDatabasePath(): Unable to create directory "
+                        + databaseFile.getParentFile());
 
-                    return super.getDatabasePath(name);
-                }
+                return super.getDatabasePath(name);
             }
 
             Log.d(TAG, "getDatabasePath(): databaseFile - " + databaseFile);
